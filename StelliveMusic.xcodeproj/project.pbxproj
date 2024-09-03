@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8670DE162C876F9A0058D7DC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8670DE152C876F9A0058D7DC /* Kingfisher */; };
 		868D1FCA2C876B3A00F194D9 /* StelliveMusicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868D1FC92C876B3A00F194D9 /* StelliveMusicApp.swift */; };
 		868D1FCC2C876B3A00F194D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868D1FCB2C876B3A00F194D9 /* ContentView.swift */; };
 		868D1FCE2C876B3B00F194D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 868D1FCD2C876B3B00F194D9 /* Assets.xcassets */; };
@@ -27,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8670DE162C876F9A0058D7DC /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +87,9 @@
 			dependencies = (
 			);
 			name = StelliveMusic;
+			packageProductDependencies = (
+				8670DE152C876F9A0058D7DC /* Kingfisher */,
+			);
 			productName = StelliveMusic;
 			productReference = 868D1FC62C876B3A00F194D9 /* StelliveMusic.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +118,10 @@
 				Base,
 			);
 			mainGroup = 868D1FBD2C876B3A00F194D9;
+			packageReferences = (
+				8670DE132C876F770058D7DC /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				8670DE142C876F9A0058D7DC /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = 868D1FC72C876B3A00F194D9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -358,6 +367,33 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8670DE132C876F770058D7DC /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+		8670DE142C876F9A0058D7DC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8670DE152C876F9A0058D7DC /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8670DE142C876F9A0058D7DC /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 868D1FBE2C876B3A00F194D9 /* Project object */;
 }
