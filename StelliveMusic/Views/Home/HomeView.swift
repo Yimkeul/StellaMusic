@@ -18,29 +18,71 @@ struct HomeView: View {
             Title()
             ArtistListView(stellaName: $stellaName)
             TabsView(selectedSongType: $selectedSongType)
+            PlayButtonArea()
             SongListView(selectedSongType: $selectedSongType, stellaName: $stellaName)
         }
-        .background(Color.teal)
-        .onAppear {
-        UIScrollView.appearance().bounces = false
+            .padding(.top, 1)
+            .onAppear {
+            UIScrollView.appearance().bounces = false
+        }
+            .onDisappear {
+            UIScrollView.appearance().bounces = true
+        }
     }
-        .onDisappear {
-        UIScrollView.appearance().bounces = true
+
+
+
+    @ViewBuilder
+    private func Title() -> some View {
+        HStack {
+            Text("스텔라이브 뮤직")
+                .font(.title)
+                .fontWeight(.bold)
+            Spacer()
+        }.padding(.horizontal, 16)
     }
-}
 
+    @ViewBuilder
+    private func PlayButtonArea() -> some View {
+        HStack(spacing: 16) {
+            Spacer()
+            Button(action: { }
+                   , label: {
+                       PlayButton(.all)
+                   })
+            Button(action: { }
+                   , label: {
+                       PlayButton(.random)
+                   })
 
+            Spacer()
+        }.padding(.vertical, 16)
+    }
 
-@ViewBuilder
-private func Title() -> some View {
-    HStack {
-        Text("스텔라이브 뮤직")
-            .font(.title)
-            .fontWeight(.bold)
-            .foregroundStyle(.white)
-        Spacer()
-    }.padding(.horizontal, 16)
-}
+    enum PlayButtonType: String {
+        case all = "전체재생"
+        case random = "랜덤재생"
+    }
+
+    @Environment(\.colorScheme) var colorScheme
+    @ViewBuilder
+    private func PlayButton(_ type: PlayButtonType) -> some View {
+        ZStack {
+            Rectangle()
+                .foregroundColor(.clear)
+                .background(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(10)
+
+            HStack(spacing: 8) {
+                Image(systemName: type == .all ? "play.fill" : "shuffle")
+                Text(type.rawValue)
+                    .font(.system(size: 14, weight: .semibold))
+                    .padding(.vertical, 8)
+                    .padding(.trailing, 4)
+            }.foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+        }
+            .environment(\.colorScheme, colorScheme)
+    }
 
 }
 
