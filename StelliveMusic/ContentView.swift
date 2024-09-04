@@ -10,30 +10,26 @@ import SwiftUIIntrospect
 
 struct ContentView: View {
     @State private var selection = 0
-    
+
     var body: some View {
-            VStack {
-                if selection == 0 {
-                    HomeView()
-                } else {
-                    PlayListView()
+        
+        
+        TabView(selection: $selection) {
+            HomeView()
+                .tabItem {
+                    Image(systemName: "music.note.house")
+                    Text("홈")
                 }
-                Spacer()
-                HStack {
-                    Spacer()
-                    Button(action: {selection = 0}, label: {
-                        Text("홈")
-                    })
-                    Spacer()
-                    Divider().frame(height: 16)
-                    Spacer()
-                    Button(action: {selection = 1}, label: {
-                        Text("보관함")
-                    })
-                    Spacer()
-                }
-                .padding(.vertical, 8)
-            }
+                .tag(0)
+            
+            PlayListView()
+                .tabItem {
+                    Image(systemName: "play.square.stack")
+                    Text("보관함") }
+                .tag(1)
+        }.tint(.indigo)
+
+
     }
 }
 

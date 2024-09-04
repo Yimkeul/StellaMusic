@@ -28,6 +28,18 @@ struct SongListView: View {
 
         return filteredSongs
     }
+    
+//    var filterDB: [Song] {
+//        let filteredSongs: [Song]
+//        if stellaName == SADB.db.first!.fullName {
+//            filteredSongs = selectedSongType == .all ? songDB : songDB.filter { $0.songType == selectedSongType.rawValue }
+//        } else {
+//            let temp = songDB.filter { $0.Singer.contains(stellaName) }
+//            filteredSongs = selectedSongType == .all ? temp : temp.filter { $0.songType == selectedSongType.rawValue }
+//        }
+//        return filteredSongs
+//    }
+
 
 
 
@@ -73,11 +85,11 @@ struct SongListView: View {
                         VStack (alignment: .leading, spacing: 8) {
                             Text(item.title)
                                 .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(.white)
+//                                .foregroundColor(.white)
 
                             Text(singer)
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.white)
+//                                .foregroundColor(.white)
                         }
 
                         Spacer()

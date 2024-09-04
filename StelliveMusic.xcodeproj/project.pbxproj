@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		861C68B42C88FE9D003DCF8F /* SupaClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861C68B32C88FE9D003DCF8F /* SupaClient.swift */; };
+		861C68B72C88FEC2003DCF8F /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 861C68B62C88FEC2003DCF8F /* Supabase */; };
+		861C68B92C88FF1A003DCF8F /* SupabaseInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 861C68B82C88FF1A003DCF8F /* SupabaseInfo.plist */; };
+		861C68BC2C88FFDE003DCF8F /* StellaInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861C68BB2C88FFDE003DCF8F /* StellaInfo.swift */; };
+		861C68BE2C890378003DCF8F /* StellaInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861C68BD2C890378003DCF8F /* StellaInfoViewModel.swift */; };
+		861C68C02C89181C003DCF8F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861C68BF2C89181C003DCF8F /* Colors.xcassets */; };
 		8670DE162C876F9A0058D7DC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8670DE152C876F9A0058D7DC /* Kingfisher */; };
 		8670DE1A2C8770900058D7DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8670DE192C8770900058D7DC /* HomeView.swift */; };
 		8670DE1C2C8770960058D7DC /* PlayListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8670DE1B2C8770960058D7DC /* PlayListView.swift */; };
@@ -23,6 +29,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		861C68B32C88FE9D003DCF8F /* SupaClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupaClient.swift; sourceTree = "<group>"; };
+		861C68B82C88FF1A003DCF8F /* SupabaseInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SupabaseInfo.plist; sourceTree = "<group>"; };
+		861C68BB2C88FFDE003DCF8F /* StellaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellaInfo.swift; sourceTree = "<group>"; };
+		861C68BD2C890378003DCF8F /* StellaInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellaInfoViewModel.swift; sourceTree = "<group>"; };
+		861C68BF2C89181C003DCF8F /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		8670DE192C8770900058D7DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8670DE1B2C8770960058D7DC /* PlayListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListView.swift; sourceTree = "<group>"; };
 		8670DE272C877B3F0058D7DC /* ArtistList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistList.swift; sourceTree = "<group>"; };
@@ -45,12 +56,30 @@
 			files = (
 				8670DE162C876F9A0058D7DC /* Kingfisher in Frameworks */,
 				8670DE212C8773C50058D7DC /* SwiftUIIntrospect in Frameworks */,
+				861C68B72C88FEC2003DCF8F /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		861C68AF2C88FDBD003DCF8F /* API */ = {
+			isa = PBXGroup;
+			children = (
+				861C68B82C88FF1A003DCF8F /* SupabaseInfo.plist */,
+				861C68B32C88FE9D003DCF8F /* SupaClient.swift */,
+				861C68BB2C88FFDE003DCF8F /* StellaInfo.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		861C68B52C88FEC2003DCF8F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		8670DE172C8770510058D7DC /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -60,11 +89,12 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		8670DE182C8770590058D7DC /* Models */ = {
+		8670DE182C8770590058D7DC /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				861C68BD2C890378003DCF8F /* StellaInfoViewModel.swift */,
 			);
-			path = Models;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		8670DE1D2C8770A70058D7DC /* Home */ = {
@@ -100,6 +130,7 @@
 			children = (
 				868D1FC82C876B3A00F194D9 /* StelliveMusic */,
 				868D1FC72C876B3A00F194D9 /* Products */,
+				861C68B52C88FEC2003DCF8F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -114,13 +145,15 @@
 		868D1FC82C876B3A00F194D9 /* StelliveMusic */ = {
 			isa = PBXGroup;
 			children = (
+				861C68AF2C88FDBD003DCF8F /* API */,
 				8670DE262C877B2C0058D7DC /* TempDB */,
-				8670DE182C8770590058D7DC /* Models */,
+				8670DE182C8770590058D7DC /* ViewModels */,
 				8670DE172C8770510058D7DC /* Views */,
 				86DE9CD12C876D4600D26C10 /* Info.plist */,
 				868D1FC92C876B3A00F194D9 /* StelliveMusicApp.swift */,
 				868D1FCB2C876B3A00F194D9 /* ContentView.swift */,
 				868D1FCD2C876B3B00F194D9 /* Assets.xcassets */,
+				861C68BF2C89181C003DCF8F /* Colors.xcassets */,
 				868D1FCF2C876B3B00F194D9 /* Preview Content */,
 			);
 			path = StelliveMusic;
@@ -153,6 +186,7 @@
 			packageProductDependencies = (
 				8670DE152C876F9A0058D7DC /* Kingfisher */,
 				8670DE202C8773C50058D7DC /* SwiftUIIntrospect */,
+				861C68B62C88FEC2003DCF8F /* Supabase */,
 			);
 			productName = StelliveMusic;
 			productReference = 868D1FC62C876B3A00F194D9 /* StelliveMusic.app */;
@@ -201,6 +235,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				861C68B92C88FF1A003DCF8F /* SupabaseInfo.plist in Resources */,
+				861C68C02C89181C003DCF8F /* Colors.xcassets in Resources */,
 				868D1FD12C876B3B00F194D9 /* Preview Assets.xcassets in Resources */,
 				868D1FCE2C876B3B00F194D9 /* Assets.xcassets in Resources */,
 			);
@@ -216,12 +252,15 @@
 				8670DE282C877B3F0058D7DC /* ArtistList.swift in Sources */,
 				8670DE2C2C878AEC0058D7DC /* TabsView.swift in Sources */,
 				8670DE1A2C8770900058D7DC /* HomeView.swift in Sources */,
+				861C68BC2C88FFDE003DCF8F /* StellaInfo.swift in Sources */,
 				868D1FCC2C876B3A00F194D9 /* ContentView.swift in Sources */,
+				861C68BE2C890378003DCF8F /* StellaInfoViewModel.swift in Sources */,
 				8670DE322C8794140058D7DC /* Song.swift in Sources */,
 				8670DE2A2C8784AE0058D7DC /* ArtistListView.swift in Sources */,
 				8670DE1C2C8770960058D7DC /* PlayListView.swift in Sources */,
 				868D1FCA2C876B3A00F194D9 /* StelliveMusicApp.swift in Sources */,
 				8670DE302C8793920058D7DC /* SongListView.swift in Sources */,
+				861C68B42C88FE9D003DCF8F /* SupaClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +507,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		861C68B62C88FEC2003DCF8F /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8670DE132C876F770058D7DC /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
 		8670DE152C876F9A0058D7DC /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8670DE142C876F9A0058D7DC /* XCRemoteSwiftPackageReference "Kingfisher" */;
