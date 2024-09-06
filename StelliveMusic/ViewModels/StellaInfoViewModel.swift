@@ -6,40 +6,34 @@
 //
 
 import Foundation
+import Combine
 
 class StellaInfoViewModel: ObservableObject {
     static let shared = StellaInfoViewModel()
     @Published var stellaInfoItems: [StellaInfo] = []
+    private var cancellables = Set<AnyCancellable>()
     
     let client = SupaClient.shared.setClient()
-
     
-    func fetchData() async  {
+    
+    func fetchData() async {
         do {
             let datas: [StellaInfo] = try await client
                 .from("StellaInfo")
                 .select()
                 .execute()
                 .value
-            DispatchQueue.main.async {
-                self.stellaInfoItems = datas
-            }
+            
+            Just(datas)
+                .receive(on: RunLoop.main)
+                .sink {
+                    self.stellaInfoItems = $0
+                    print("StellaInfo : \($0)")
+                }
+                .store(in: &cancellables)
+            
         } catch {
             print(error)
         }
     }
-    
-//    func getData() async -> [StellaInfo] {
-//        do {
-//            let datas: [StellaInfo] = try await client
-//                .from("StellaInfo")
-//                .select()
-//                .execute()
-//                .value
-//            return datas
-//        } catch {
-//            print(error)
-//            return []
-//        }
-//    }
 }

@@ -7,55 +7,39 @@
 
 import Foundation
 import SwiftUI
+import Kingfisher
 
 struct SongListView: View {
+    @EnvironmentObject var viewModel: SongInfoViewModel
+
     @Binding var selectedSongType: SongType
     @Binding var stellaName: String
 
     let songDB: [Song] = Song.db
 
-    var filterDB: [Song] {
-        let filteredSongs = stellaName == SADB.db.first!.fullName
-            ? (
-            selectedSongType == .all ? songDB:
-                songDB.filter { $0.songType == selectedSongType.rawValue })
-        : {
-            let temp = songDB.filter { $0.Singer.contains(stellaName) }
-            return selectedSongType == .all
-                ? temp
-            : temp.filter { $0.songType == selectedSongType.rawValue }
-        }()
+    var filterDB: [SongInfo] {
+        var filteredSongs: [SongInfo]
 
+        if stellaName == "스텔라이브" {
+            filteredSongs = selectedSongType == .all ? viewModel.songInfoItems : viewModel.songInfoItems.filter {
+                $0.songType == selectedSongType.rawValue
+            }
+        } else {
+            let temp = viewModel.songInfoItems.filter { $0.singer.contains(stellaName) }
+            return selectedSongType == .all ? temp : temp.filter { $0.songType == selectedSongType.rawValue }
+
+        }
         return filteredSongs
     }
-    
-//    var filterDB: [Song] {
-//        let filteredSongs: [Song]
-//        if stellaName == SADB.db.first!.fullName {
-//            filteredSongs = selectedSongType == .all ? songDB : songDB.filter { $0.songType == selectedSongType.rawValue }
-//        } else {
-//            let temp = songDB.filter { $0.Singer.contains(stellaName) }
-//            filteredSongs = selectedSongType == .all ? temp : temp.filter { $0.songType == selectedSongType.rawValue }
-//        }
-//        return filteredSongs
-//    }
-
-
-
 
 
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 8) {
-                if filterDB.isEmpty {
-                    Text("노래 없음")
-                } else {
-                    ForEach(filterDB, id: \.self) { item in
-                        let singer = makeSinger(item.Singer)
-                        SongListItem(item: item, singer: singer)
-                    }
+                ForEach(filterDB, id: \.self) { item in
+                    let singer = makeSinger(item.singer)
+                    SongListItem(item: item, singer: singer)
                 }
-                
             }
         }
             .padding(16)
@@ -70,10 +54,10 @@ struct SongListView: View {
 
 
     @ViewBuilder
-    private func SongListItem(item: Song, singer: String) -> some View {
+    private func SongListItem(item: SongInfo, singer: String) -> some View {
         VStack(spacing: 16) {
             HStack(alignment: .center) {
-                Image(item.thumbnail)
+                KFImage(URL(string: item.thumbnail))
                     .resizable()
                     .frame(width: 70, height: 50)
                     .cornerRadius(4)
@@ -85,11 +69,9 @@ struct SongListView: View {
                         VStack (alignment: .leading, spacing: 8) {
                             Text(item.title)
                                 .font(.system(size: 18, weight: .bold))
-//                                .foregroundColor(.white)
 
                             Text(singer)
                                 .font(.system(size: 14, weight: .semibold))
-//                                .foregroundColor(.white)
                         }
 
                         Spacer()

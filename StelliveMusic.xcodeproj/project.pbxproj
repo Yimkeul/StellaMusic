@@ -26,6 +26,8 @@
 		868D1FCC2C876B3A00F194D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868D1FCB2C876B3A00F194D9 /* ContentView.swift */; };
 		868D1FCE2C876B3B00F194D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 868D1FCD2C876B3B00F194D9 /* Assets.xcassets */; };
 		868D1FD12C876B3B00F194D9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 868D1FD02C876B3B00F194D9 /* Preview Assets.xcassets */; };
+		86B2BB132C8A914100EA7A84 /* SongInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B2BB122C8A914100EA7A84 /* SongInfoViewModel.swift */; };
+		86B2BB152C8A916D00EA7A84 /* SongInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B2BB142C8A916D00EA7A84 /* SongInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		868D1FCB2C876B3A00F194D9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		868D1FCD2C876B3B00F194D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		868D1FD02C876B3B00F194D9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		86B2BB122C8A914100EA7A84 /* SongInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongInfoViewModel.swift; sourceTree = "<group>"; };
+		86B2BB142C8A916D00EA7A84 /* SongInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongInfo.swift; sourceTree = "<group>"; };
 		86DE9CD12C876D4600D26C10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -69,6 +73,7 @@
 				861C68B82C88FF1A003DCF8F /* SupabaseInfo.plist */,
 				861C68B32C88FE9D003DCF8F /* SupaClient.swift */,
 				861C68BB2C88FFDE003DCF8F /* StellaInfo.swift */,
+				86B2BB142C8A916D00EA7A84 /* SongInfo.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -93,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				861C68BD2C890378003DCF8F /* StellaInfoViewModel.swift */,
+				86B2BB122C8A914100EA7A84 /* SongInfoViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -251,9 +257,11 @@
 			files = (
 				8670DE282C877B3F0058D7DC /* ArtistList.swift in Sources */,
 				8670DE2C2C878AEC0058D7DC /* TabsView.swift in Sources */,
+				86B2BB152C8A916D00EA7A84 /* SongInfo.swift in Sources */,
 				8670DE1A2C8770900058D7DC /* HomeView.swift in Sources */,
 				861C68BC2C88FFDE003DCF8F /* StellaInfo.swift in Sources */,
 				868D1FCC2C876B3A00F194D9 /* ContentView.swift in Sources */,
+				86B2BB132C8A914100EA7A84 /* SongInfoViewModel.swift in Sources */,
 				861C68BE2C890378003DCF8F /* StellaInfoViewModel.swift in Sources */,
 				8670DE322C8794140058D7DC /* Song.swift in Sources */,
 				8670DE2A2C8784AE0058D7DC /* ArtistListView.swift in Sources */,
