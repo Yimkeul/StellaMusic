@@ -10,11 +10,11 @@ import SwiftUI
 import Kingfisher
 
 struct ArtistListView: View {
-    let items: [SADB] = SADB.db
-
-    @StateObject private var viewModel: StellaInfoViewModel = StellaInfoViewModel()
     @Binding var stellaName: String
+
+    @EnvironmentObject var viewModel: StellaInfoViewModel
     @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
 
         ScrollView(.horizontal, showsIndicators: false) {
@@ -34,11 +34,6 @@ struct ArtistListView: View {
                 .padding(.vertical, 8)
         }
             .padding(.top, 10)
-            .onAppear {
-            Task {
-                await viewModel.fetchData()
-            }
-        }
     }
     
     @ViewBuilder
@@ -104,14 +99,3 @@ struct ArtistListView: View {
         .environment(\.colorScheme, colorScheme)
     }
 }
-
-
-
-
-
-#Preview {
-    ArtistListView(stellaName: .constant("아이리 칸나"))
-
-}
-
-

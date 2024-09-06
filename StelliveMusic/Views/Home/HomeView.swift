@@ -10,7 +10,7 @@ import SwiftUIIntrospect
 
 struct HomeView: View {
     @State private var selectedSongType: SongType = .all
-    @State private var stellaName: String = SADB.db.first!.fullName
+    @State private var stellaName: String = "스텔라이브"
 
     var body: some View {
 
