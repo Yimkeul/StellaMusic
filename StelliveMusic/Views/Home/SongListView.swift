@@ -15,8 +15,6 @@ struct SongListView: View {
     @Binding var selectedSongType: SongType
     @Binding var stellaName: String
 
-    let songDB: [Song] = Song.db
-
     var filterDB: [SongInfo] {
         var filteredSongs: [SongInfo]
 

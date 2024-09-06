@@ -16,6 +16,10 @@ class StellaInfoViewModel: ObservableObject {
     let client = SupaClient.shared.setClient()
     
     
+    func sortData(_ item: [StellaInfo]) -> [StellaInfo] {
+        return item.sorted { $0.id < $1.id}
+    }
+    
     func fetchData() async {
         do {
             let datas: [StellaInfo] = try await client
@@ -27,11 +31,10 @@ class StellaInfoViewModel: ObservableObject {
             Just(datas)
                 .receive(on: RunLoop.main)
                 .sink {
-                    self.stellaInfoItems = $0
+                    self.stellaInfoItems = self.sortData($0)
                     print("StellaInfo : \($0)")
                 }
                 .store(in: &cancellables)
-            
         } catch {
             print(error)
         }

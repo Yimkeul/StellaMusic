@@ -10,7 +10,6 @@ import SwiftUI
 import Kingfisher
 
 struct ArtistListView: View {
-    let items: [SADB] = SADB.db
     @Binding var stellaName: String
 
     @EnvironmentObject var viewModel: StellaInfoViewModel

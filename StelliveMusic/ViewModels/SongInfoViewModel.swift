@@ -15,7 +15,9 @@ class SongInfoViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     let client = SupaClient.shared.setClient()
-
+    func sortData(_ item: [SongInfo]) -> [SongInfo] {
+        return item.sorted { $0.id < $1.id}
+    }
 
     func fetchData() async {
         do {
@@ -28,7 +30,7 @@ class SongInfoViewModel: ObservableObject {
             Just(datas)
                 .receive(on: RunLoop.main)
                 .sink {
-                self.songInfoItems = $0
+                    self.songInfoItems = self.sortData($0)
                 print("SongInfo : \($0)")
             }.store(in: &cancellables)
         } catch {
