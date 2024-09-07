@@ -13,7 +13,6 @@ struct ContentView: View {
     @StateObject private var stellaInfoViewModel: StellaInfoViewModel = StellaInfoViewModel()
     @StateObject private var songInfoViewModel: SongInfoViewModel = SongInfoViewModel()
     
-    
     var body: some View {
         TabView(selection: $selection) {
             HomeView()
@@ -36,8 +35,8 @@ struct ContentView: View {
                 await stellaInfoViewModel
                     .fetchData()
                 await songInfoViewModel.fetchData()
-                
             }
+                
         }
 
     }

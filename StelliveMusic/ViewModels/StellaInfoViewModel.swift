@@ -32,7 +32,6 @@ class StellaInfoViewModel: ObservableObject {
                 .receive(on: RunLoop.main)
                 .sink {
                     self.stellaInfoItems = self.sortData($0)
-                    print("StellaInfo : \($0)")
                 }
                 .store(in: &cancellables)
         } catch {
