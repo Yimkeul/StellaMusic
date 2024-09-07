@@ -83,10 +83,4 @@ struct HomeView: View {
         }
             .environment(\.colorScheme, colorScheme)
     }
-
-}
-
-
-#Preview {
-    HomeView()
 }

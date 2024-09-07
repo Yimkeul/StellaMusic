@@ -29,6 +29,8 @@
 		868D1FD12C876B3B00F194D9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 868D1FD02C876B3B00F194D9 /* Preview Assets.xcassets */; };
 		86B2BB132C8A914100EA7A84 /* SongInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B2BB122C8A914100EA7A84 /* SongInfoViewModel.swift */; };
 		86B2BB152C8A916D00EA7A84 /* SongInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B2BB142C8A916D00EA7A84 /* SongInfo.swift */; };
+		86C6B76D2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6B76C2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift */; };
+		86C6B7702C8C195D00F07EF2 /* MusicPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6B76F2C8C195D00F07EF2 /* MusicPlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		868D1FD02C876B3B00F194D9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		86B2BB122C8A914100EA7A84 /* SongInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongInfoViewModel.swift; sourceTree = "<group>"; };
 		86B2BB142C8A916D00EA7A84 /* SongInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongInfo.swift; sourceTree = "<group>"; };
+		86C6B76C2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedBottomSheet.swift; sourceTree = "<group>"; };
+		86C6B76F2C8C195D00F07EF2 /* MusicPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerView.swift; sourceTree = "<group>"; };
 		86DE9CD12C876D4600D26C10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,6 +103,7 @@
 		8670DE172C8770510058D7DC /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				86C6B76E2C8C193A00F07EF2 /* MusicPlayer */,
 				8670DE1D2C8770A70058D7DC /* Home */,
 				8670DE1E2C8770AB0058D7DC /* PlayList */,
 			);
@@ -158,9 +163,9 @@
 				862147BA2C8B9E9C0008B888 /* Models */,
 				8670DE182C8770590058D7DC /* ViewModels */,
 				8670DE172C8770510058D7DC /* Views */,
+				868D1FCB2C876B3A00F194D9 /* ContentView.swift */,
 				86DE9CD12C876D4600D26C10 /* Info.plist */,
 				868D1FC92C876B3A00F194D9 /* StelliveMusicApp.swift */,
-				868D1FCB2C876B3A00F194D9 /* ContentView.swift */,
 				868D1FCD2C876B3B00F194D9 /* Assets.xcassets */,
 				861C68BF2C89181C003DCF8F /* Colors.xcassets */,
 				868D1FCF2C876B3B00F194D9 /* Preview Content */,
@@ -174,6 +179,15 @@
 				868D1FD02C876B3B00F194D9 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		86C6B76E2C8C193A00F07EF2 /* MusicPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				86C6B76F2C8C195D00F07EF2 /* MusicPlayerView.swift */,
+				86C6B76C2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift */,
+			);
+			path = MusicPlayer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +274,7 @@
 			files = (
 				862147BE2C8BB5710008B888 /* Songs.swift in Sources */,
 				8670DE2C2C878AEC0058D7DC /* TabsView.swift in Sources */,
+				86C6B7702C8C195D00F07EF2 /* MusicPlayerView.swift in Sources */,
 				86B2BB152C8A916D00EA7A84 /* SongInfo.swift in Sources */,
 				862147BC2C8BA1640008B888 /* AudioPlayerViewModel.swift in Sources */,
 				8670DE1A2C8770900058D7DC /* HomeView.swift in Sources */,
@@ -269,6 +284,7 @@
 				861C68BE2C890378003DCF8F /* StellaInfoViewModel.swift in Sources */,
 				8670DE322C8794140058D7DC /* SongType.swift in Sources */,
 				8670DE2A2C8784AE0058D7DC /* ArtistListView.swift in Sources */,
+				86C6B76D2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift in Sources */,
 				8670DE1C2C8770960058D7DC /* PlayListView.swift in Sources */,
 				868D1FCA2C876B3A00F194D9 /* StelliveMusicApp.swift in Sources */,
 				8670DE302C8793920058D7DC /* SongListView.swift in Sources */,

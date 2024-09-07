@@ -11,7 +11,7 @@ import Combine
 import MediaPlayer
 
 class AudioPlayerViewModel: ObservableObject {
-    private var player: AVQueuePlayer? // AVQueuePlayer 사용
+    private var player: AVQueuePlayer?
     var cancellables = Set<AnyCancellable>()
     private var currentItem: AVPlayerItem?
 
@@ -21,7 +21,6 @@ class AudioPlayerViewModel: ObservableObject {
     var currentSong: Songs? // 현재 재생 중인 곡 추적
 
     func filterSongs(songInfoItems: [Songs], selectedSongType: SongType, stellaName: String) {
-        print(songInfoItems, selectedSongType, stellaName)
         if stellaName == "스텔라이브" {
             filteredSongs = selectedSongType == .all ? songInfoItems : songInfoItems.filter {
                 $0.songInfo.songType == selectedSongType.rawValue
@@ -43,7 +42,7 @@ class AudioPlayerViewModel: ObservableObject {
     // 음악 재생
     func playAudio(url: URL?, song: Songs?) {
         guard let url = url, let song = song else { return }
-
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
         // AVQueuePlayer가 없으면 새로 생성
         if player == nil {
             player = AVQueuePlayer()
