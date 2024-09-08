@@ -55,7 +55,7 @@ struct ExpandedBottomSheet: View {
                             .frame(width: 40, height: 5)
                             .opacity(animateContent ? 1 : 0)
                             .offset(y: animateContent ? 0 : size.height)
-ㄴ                        GeometryReader {
+                      GeometryReader {
                             let size = $0.size
                             KFImage(URL(string: currentSong.songInfo.thumbnail))
                                 .resizable()
