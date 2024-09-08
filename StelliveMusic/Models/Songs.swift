@@ -11,11 +11,11 @@ import Combine
 class Songs: ObservableObject {
 
     @Published var songInfo: SongInfo
-    @Published var isPlay: Bool = false
+    @Published var playerState: PlayerState = .stopped
 
-    init(songInfo: SongInfo, isPlay: Bool = false) {
+    init(songInfo: SongInfo, playerState: PlayerState = .stopped) {
         self.songInfo = songInfo
-        self.isPlay = isPlay
+        self.playerState = playerState
     }
 }
 

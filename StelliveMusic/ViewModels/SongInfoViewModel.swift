@@ -32,7 +32,7 @@ class SongInfoViewModel: ObservableObject {
 
             Just(datas)
                 .map { songInfos in
-                return songInfos.map { Songs(songInfo: $0, isPlay: false) }
+                    return songInfos.map { Songs(songInfo: $0, playerState: PlayerState.stopped) }
             }
                 .receive(on: RunLoop.main)
                 .sink {
