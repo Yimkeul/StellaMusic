@@ -30,7 +30,6 @@ struct ExpandedBottomSheet: View {
                     RoundedRectangle(cornerRadius: animateContent ? deviceCornerRadius : 0, style: .continuous)
                         .fill(.ultraThickMaterial)
                         .overlay {
-                        RoundedRectangle(cornerRadius: animateContent ? deviceCornerRadius : 0, style: .continuous)
                         KFImage(URL(string: currentSong.songInfo.thumbnail))
                             .resizable()
                             .frame(width: size.width * 1.5, height: size.height * 1.5)
@@ -105,8 +104,6 @@ struct ExpandedBottomSheet: View {
                     animateContent = true
                 }
             }
-                .environment(\.colorScheme, .dark)
-
         }
     }
 
