@@ -83,7 +83,9 @@ struct ExpandedBottomSheet: View {
                     DragGesture()
                         .onChanged({ value in
                         let translationY = value.translation.height
-                        offsetY = (translationY > 0 ? translationY : 0)
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                offsetY = (translationY > 0 ? translationY : 0)
+                            }
                     }).onEnded({ value in
                         withAnimation(.easeInOut(duration: 0.3)) {
                             if offsetY > size.height * 0.4 {
@@ -96,8 +98,6 @@ struct ExpandedBottomSheet: View {
                     })
                 )
                     .ignoresSafeArea(.container, edges: .all)
-
-
             }
                 .onAppear() {
                 withAnimation(.easeInOut(duration: 0.35)) {
@@ -131,19 +131,20 @@ struct ExpandedBottomSheet: View {
                                     .foregroundStyle(.gray)
                             }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Button {
-
-                            } label: {
-                                Image(systemName: "heart")
-                                    .foregroundColor(.white)
-                                    .padding(12)
-                                    .background {
-                                    Circle()
-                                        .fill(.ultraThinMaterial)
-                                        .environment(\.colorScheme, .light)
-                                }
-                            }
+                            
+                            // TODO: 업데이트 하기
+//                            Button {
+//
+//                            } label: {
+//                                Image(systemName: "heart")
+//                                    .foregroundColor(.white)
+//                                    .padding(12)
+//                                    .background {
+//                                    Circle()
+//                                        .fill(.ultraThinMaterial)
+//                                        .environment(\.colorScheme, .light)
+//                                }
+//                            }
                         }
                         // MARK: TimeLine
                         if maxValue != 0 {
@@ -159,44 +160,44 @@ struct ExpandedBottomSheet: View {
                     }
                         .frame(height: size.height / 2.5, alignment: .top)
                     HStack(spacing: size.width * 0.1) {
+                        // TODO: 업데이트 하기
+//                        Button {
+//
+//                        } label: {
+//                            Image(systemName: "shuffle")
+//                                .font(.title3)
+//
+//                        }
+
 
                         Button {
-
-                        } label: {
-                            Image(systemName: "shuffle")
-                                .font(.title3)
-
-                        }
-
-
-                        Button {
-
+                            audioPlayerViewModel.playPreviousAudio()
                         } label: {
                             Image(systemName: "backward.fill")
                                 .font(size.height < 300 ? .title3 : .title2)
                         }
 
                         Button {
-
+                            audioPlayerViewModel.controlPlay(currentSong)
                         } label: {
-                            Image(systemName: "pause.fill")
+                            Image(systemName: audioPlayerViewModel.getPlayerIcon(for: currentSong))
                                 .font(size.height < 300 ? .largeTitle : .system(size: 50))
                         }
 
                         Button {
-
+                            audioPlayerViewModel.playNextAudio()
                         } label: {
                             Image(systemName: "forward.fill")
                                 .font(size.height < 300 ? .title3 : .title2)
                         }
-
-                        Button {
-
-                        } label: {
-                            Image(systemName: "repeat") // toggle repeat.1
-                            .font(.title3)
-
-                        }
+                        // TODO: 업데이트 하기
+//                        Button {
+//
+//                        } label: {
+//                            Image(systemName: "repeat") // toggle repeat.1
+//                            .font(.title3)
+//
+//                        }
 
                     }
                         .foregroundColor(.indigo)

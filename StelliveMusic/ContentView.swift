@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftUIIntrospect
+import AVFoundation
 
 struct ContentView: View {
     @State private var selection = 0
@@ -31,13 +32,14 @@ struct ContentView: View {
 
                 .tag(0)
 
-            PlayListView()
-                .environmentObject(audioPlayerViewModel)
-                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
-                .tabItem {
-                Image(systemName: "play.square.stack")
-                Text("보관함") }
-                .tag(1)
+            // TODO: 업데이트 하기
+//            PlayListView()
+//                .environmentObject(audioPlayerViewModel)
+//                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
+//                .tabItem {
+//                Image(systemName: "play.square.stack")
+//                Text("보관함") }
+//                .tag(1)
         }
             .tint(.indigo)
 
@@ -52,11 +54,15 @@ struct ContentView: View {
             }
         }
             .onAppear {
+                try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+                audioPlayerViewModel.checkCurrentSong()
+                audioPlayerViewModel.MPNowPlayingInfoCenterSetting()
             Task {
                 await stellaInfoViewModel
                     .fetchData()
                 await songInfoViewModel.fetchData()
             }
+                
 
         }
 

@@ -39,15 +39,15 @@ struct MusicPlayerView: View {
 
 
                 Button {
-
+                    audioPlayerViewModel.controlPlay(currentSong)
                 } label: {
-                    Image(systemName: "pause.fill")
+                    Image(systemName: audioPlayerViewModel.getPlayerIcon(for: currentSong))
                         .font(.title2)
                 }
                     .foregroundColor(.indigo)
 
                 Button {
-
+                    audioPlayerViewModel.playNextAudio()
                 } label: {
                     Image(systemName: "forward.fill")
                         .font(.title2)
