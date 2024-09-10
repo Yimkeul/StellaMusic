@@ -24,7 +24,6 @@ struct HomeView: View {
         }
             .padding(.top, 1)
             .onAppear {
-
             UIScrollView.appearance().bounces = false
         }
             .onDisappear {
@@ -55,12 +54,11 @@ struct HomeView: View {
                 PlayButton(.all)
             }
             
-            // TODO: 업데이트 하기
-//            Button {
-//                audioViewModel.playShuffleAudio()
-//            } label: {
-//                PlayButton(.random)
-//            }
+            Button {
+                audioViewModel.playShuffleAudio()
+            } label: {
+                PlayButton(.random)
+            }
 
             Spacer()
         }.padding(.vertical, 16)

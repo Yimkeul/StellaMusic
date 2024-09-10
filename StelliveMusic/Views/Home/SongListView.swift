@@ -76,6 +76,7 @@ struct SongListView: View {
                             audioPlayerViewModel.controlPlay(item)
                         } label: {
                             Image(systemName: audioPlayerViewModel.getPlayerIcon(for: item))
+                                
 
                         }.padding(.trailing, 4)
                             .onReceive(item.$playerState) { _ in

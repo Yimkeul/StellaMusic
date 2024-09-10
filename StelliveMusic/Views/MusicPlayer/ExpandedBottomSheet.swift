@@ -35,7 +35,7 @@ struct ExpandedBottomSheet: View {
                             .frame(width: size.width * 1.5, height: size.height * 1.5)
                             .scaledToFill()
                             .edgesIgnoringSafeArea(.all)
-                            .blur(radius: 55) // 블러 효과 적용
+                            .blur(radius: 40) // 블러 효과 적용
                         .position(x: size.width / 2, y: size.height / 2)
                             .clipShape(RoundedRectangle(cornerRadius: animateContent ? deviceCornerRadius : 0, style: .continuous))
                             .opacity(animateContent ? 1 : 0)
@@ -54,7 +54,8 @@ struct ExpandedBottomSheet: View {
                             .frame(width: 40, height: 5)
                             .opacity(animateContent ? 1 : 0)
                             .offset(y: animateContent ? 0 : size.height)
-                      GeometryReader {
+                            .padding(.horizontal, 25)
+                        GeometryReader {
                             let size = $0.size
                             KFImage(URL(string: currentSong.songInfo.thumbnail))
                                 .resizable()
@@ -66,14 +67,15 @@ struct ExpandedBottomSheet: View {
                             .matchedGeometryEffect(id: "ARTWORK", in: animation)
                             .frame(height: size.width - 50)
                             .padding(.vertical, size.height < 700 ? 10 : 30)
+                            .padding(.horizontal, 25)
 
                         PlayerView(size)
+                            .background(.black.opacity(0.1))
                             .offset(y: animateContent ? 0 : size.height)
 
                     }
                         .padding(.top, safeArea.top + (safeArea.bottom == 0 ? 10 : 0))
                         .padding(.bottom, safeArea.bottom == 0 ? 10 : safeArea.bottom)
-                        .padding(.horizontal, 25)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                         .clipped()
                 }
@@ -83,9 +85,9 @@ struct ExpandedBottomSheet: View {
                     DragGesture()
                         .onChanged({ value in
                         let translationY = value.translation.height
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                offsetY = (translationY > 0 ? translationY : 0)
-                            }
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            offsetY = (translationY > 0 ? translationY : 0)
+                        }
                     }).onEnded({ value in
                         withAnimation(.easeInOut(duration: 0.3)) {
                             if offsetY > size.height * 0.4 {
@@ -124,14 +126,15 @@ struct ExpandedBottomSheet: View {
                                     .lineLimit(nil) // 줄 수 제한 없음
                                     .multilineTextAlignment(.leading) // 왼쪽 정렬
                                     .fixedSize(horizontal: false, vertical: true)
+                                    .padding(.top, 16)
                                 let singer = audioPlayerViewModel.makeSinger(currentSong.songInfo.singer)
                                 Text(singer)
                                     .font(.system(.title3, design: .rounded))
                                     .fontWeight(.semibold)
-                                    .foregroundStyle(.gray)
+                                    .foregroundStyle(.white.opacity(0.8))
                             }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                            
+
                             // TODO: 업데이트 하기
 //                            Button {
 //
@@ -148,26 +151,27 @@ struct ExpandedBottomSheet: View {
                         }
                         // MARK: TimeLine
                         if maxValue != 0 {
-                            MusicProgressSlider(value: $value, inRange: .constant(0...maxValue), activeFillColor: Color.white, fillColor: Color.indigo, emptyColor: Color.gray, height: 32) { edit in
+                            MusicProgressSlider(value: $value, inRange: .constant(0...maxValue), activeFillColor: Color.indigo, fillColor: Color.indigo, emptyColor: Color.white.opacity(0.8), height: 32) { edit in
                                 if !edit {
                                     audioPlayerViewModel.seekToTime(value)
                                 }
 
                             }
                         } else {
-                            MusicEmptyProgressSlider(activeFillColor: Color.white, fillColor: Color.indigo, emptyColor: Color.gray, height: 32)
+                            MusicEmptyProgressSlider(activeFillColor: Color.white, fillColor: Color.indigo, emptyColor: Color.white.opacity(0.8), height: 32)
                         }
                     }
                         .frame(height: size.height / 2.5, alignment: .top)
                     HStack(spacing: size.width * 0.1) {
                         // TODO: 업데이트 하기
-//                        Button {
-//
-//                        } label: {
-//                            Image(systemName: "shuffle")
-//                                .font(.title3)
-//
-//                        }
+                        Button {
+                            audioPlayerViewModel.shuffleModeToggle()
+//                            audioPlayerViewModel.isShuffleMode.toggle()
+//                            audioPlayerViewModel.objectWillChange.send()
+                        } label: {
+                            Image(systemName: audioPlayerViewModel.isShuffleMode ? "shuffle.circle.fill" : "shuffle.circle")
+                                .font(.title3)
+                        }
 
 
                         Button {
@@ -190,21 +194,22 @@ struct ExpandedBottomSheet: View {
                             Image(systemName: "forward.fill")
                                 .font(size.height < 300 ? .title3 : .title2)
                         }
+                        
                         // TODO: 업데이트 하기
-//                        Button {
-//
-//                        } label: {
-//                            Image(systemName: "repeat") // toggle repeat.1
-//                            .font(.title3)
-//
-//                        }
+                        Button {
+
+                        } label: {
+                            Image(systemName: "repeat") // toggle repeat.1
+                            .font(.title3)
+
+                        }
 
                     }
-                        .foregroundColor(.indigo)
+                    .foregroundColor(.white.opacity(0.8))
                         .frame(maxHeight: .infinity)
                 }
             }
-
+                .padding(.horizontal, 25)
                 .onAppear() {
                 Publishers.CombineLatest(audioPlayerViewModel.$currentTime, audioPlayerViewModel.$duration)
                     .sink {

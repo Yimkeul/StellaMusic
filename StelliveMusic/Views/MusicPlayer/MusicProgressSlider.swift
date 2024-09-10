@@ -46,7 +46,7 @@ struct MusicProgressSlider<T: BinaryFloatingPoint>: View {
                     }
                         .font(.system(.headline, design: .rounded))
                         .monospacedDigit()
-                        .foregroundColor(isActive ? fillColor : emptyColor)
+                        .foregroundColor(emptyColor)
                 }
                     .frame(width: bounds.size.width, alignment: .center)
             }

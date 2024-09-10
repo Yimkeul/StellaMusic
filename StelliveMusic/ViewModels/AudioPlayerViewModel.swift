@@ -14,7 +14,7 @@ import Kingfisher
 class AudioPlayerViewModel: ObservableObject {
     // TODO: 업데이트 하기
     enum PlayMode {
-        case isShuffledMode
+//        case isShuffledMode
         case isInfinityMode
         case isOneSongInfinityMode
         case isDefaultMode
@@ -28,198 +28,26 @@ class AudioPlayerViewModel: ObservableObject {
     @Published var filteredSongs: [Songs] = []
     @Published var currentSong: Songs?
 
+    private var waitingSongs: [Songs] = []
+
     // 재생 시간 관련 프로퍼티
     @Published private(set) var duration: TimeInterval = 0.0
     @Published private(set) var currentTime: TimeInterval = 0.0
 
     // 재생 모드 관련 (셔플, 무한 반복, 1곡 반복, 1회전)
     @Published var playMode: PlayMode = .isDefaultMode
+    @Published var isShuffleMode: Bool = false
     private var timeObserver: Any?
 
-    func checkCurrentSong() {
-        self.$currentSong
-            .receive(on: DispatchQueue.main)
-            .sink {
-            print("Check: \($0?.songInfo.title), \($0?.playerState)")
-        }
-            .store(in: &cancellables)
-        
-        
-        self.$filteredSongs
-            .receive(on: DispatchQueue.main)
-            .sink {
-                print("check filtersongs : \($0)")
-        }
-            .store(in: &cancellables)
-        
-    }
-}
-
-// MARK: MusicPlayer Control 모음집
-extension AudioPlayerViewModel {
-
-    func clearAVPlayer() {
-        removePeriodicTimeObserver() // 초단위 초기화
-        player?.pause() // 플레이어 정지
-        player?.removeAllItems() // 플레이어 초기화
-    }
-
-    // 전체 곡 재생 (필터된 리스트 또는 플레이리스트에 있는 곡 전체 순차 재생)
-    func playAllAudio() {
-        clearAVPlayer()
-        let allSongList = filteredSongs
-
-        guard !allSongList.isEmpty else { return }
-
-        let items = allSongList.map { AVPlayerItem(url: URL(string: $0.songInfo.mp3Link)!) }
-
-        player = AVQueuePlayer(items: items)
-        player?.play()
-        isPlaying = true
-
-        currentSong = allSongList.first
-        currentSong?.playerState = .playing
-
-        updateNowPlayingInfo()
-
-        addPeriodicTimeObserver()
-
+    init() {
         // 재생이 끝날 때 이벤트 감지
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: .main) { [weak self] notification in
-            self?.allSongListDidFinishPlaying(notification, allSongList: allSongList)
+            guard let self = self else { return }
+            self.SongListDidFinishPlaying(notification, self.waitingSongs)
         }
     }
-
-
-    // TODO: 업데이트 하기
-    // 셔플(랜덤) 곡 재생 (필터된 리스트 또는 플레이리스트에 있는곡 랜덤 재생)
-//    func playShuffleAudio() {
-//        clearAVPlayer()
-//        let allSongList = filteredSongs
-//        guard !allSongList.isEmpty else { return }
-//
-//        let items = allSongList.shuffled()
-//
-//        let shuffledItems = items.map { AVPlayerItem(url: URL(string: $0.songInfo.mp3Link)!) }
-//
-//
-//        player = AVQueuePlayer(items: shuffledItems)
-//        player?.play()
-//
-//        currentSong = items.first
-//        currentSong?.playerState = .playing
-//
-//        addPeriodicTimeObserver()
-//
-//        // 재생이 끝날 때 이벤트 감지
-//        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: .main) { [weak self] notification in
-//            self?.allSongListDidFinishPlaying(notification, allSongList: items)
-//        }
-//    }
-
-    func playAudio(selectSong: Songs) {
-        if player == nil {
-            player = AVQueuePlayer()
-        }
-
-        if currentSong == selectSong && player?.currentItem?.status == .readyToPlay {
-            player?.play()
-            isPlaying = true
-            currentSong?.playerState = .playing
-        } else {
-            removePeriodicTimeObserver()
-            let newPlayerItem = AVPlayerItem(url: URL(string: selectSong.songInfo.mp3Link)!)
-            player?.replaceCurrentItem(with: newPlayerItem)
-            currentSong = selectSong
-            player?.play()
-            isPlaying = true
-            currentSong?.playerState = .playing
-            addPeriodicTimeObserver()
-        }
-
-        updateNowPlayingInfo()
-
-        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: .main) { [weak self] notification in
-            self?.songDidFinishPlaying(notification)
-        }
-    }
-
-    // 현재 곡의 이전 곡 재생 (필터된 리스트 또는 플레이리스트에서 현재 곡의 이전 곡 재생)
-    func playPreviousAudio() {
-        guard let currentSong = currentSong,
-            let currentIndex = filteredSongs.firstIndex(of: currentSong) else {
-            print("Error: Current song not found in the playlist.")
-            return
-        }
-
-        // 이전 곡이 존재하는지 확인
-        let previousIndex = currentIndex > 0 ? currentIndex - 1: filteredSongs.count - 1
-        let previousSong = filteredSongs[previousIndex]
-
-        // 이전 곡 재생
-        playAudio(selectSong: previousSong)
-        print("Playing previous song: \(previousSong.songInfo.title)")
-    }
-
-    // 현재 곡의 다음 곡 재생 (필터된 리스트 또는 플레이리스트에서 현재 곡의 다음 곡 재생)
-    func playNextAudio() {
-        guard let player = player, player.items().count > 0 else {
-            print("Error: No items in the player queue.")
-            return
-        }
-
-        // 다음 곡으로 넘어가기 (큐에 남은 곡이 있으면 재생)
-        player.advanceToNextItem()
-
-        // 다음 곡 정보 업데이트
-        if let currentItem = player.currentItem,
-            let asset = currentItem.asset as? AVURLAsset {
-            let nextSongURL = asset.url
-
-            // filteredSongs에서 다음 곡을 찾아 currentSong을 업데이트
-            if let song = filteredSongs.first(where: { $0.songInfo.mp3Link == nextSongURL.absoluteString }) {
-                currentSong = song
-                currentSong?.playerState = .playing
-                updateNowPlayingInfo() // Now Playing 정보 업데이트
-                addPeriodicTimeObserver() // 타임 옵저버 추가
-                print("Playing next song: \(song.songInfo.title)")
-            }
-        } else {
-            print("Error: Could not get the URL of the current AVPlayerItem.")
-        }
-    }
-
-    // 음악 일시정지
-    func pauseAudio() {
-        player?.pause()
-        isPlaying = false
-        currentSong?.playerState = .paused
-    }
-}
-
-extension AudioPlayerViewModel {
-
-    private func getNextSong(for song: Songs, playList: [Songs]?) -> Songs? {
-
-        // 전체 재생인 경우
-        if let allSongList = playList {
-            guard let currentIndex = allSongList.firstIndex(of: song) else { return nil }
-            let nextIndex = (currentIndex + 1) % allSongList.count
-            print("Next Song in 전체 선택 : \(allSongList[nextIndex].songInfo.title)")
-            return allSongList[nextIndex]
-        }
-        // 선택 재생인 경우
-            else {
-            guard let currentIndex = filteredSongs.firstIndex(of: song) else { return nil }
-            let nextIndex = (currentIndex + 1) % filteredSongs.count
-            print("Next Song 개별 선택 (기존 필터내) : \(filteredSongs[nextIndex].songInfo.title)")
-            return filteredSongs[nextIndex]
-        }
-
-    }
-
     // 전체 선택 노래 종료후 함수
-    private func allSongListDidFinishPlaying(_ notification: Notification, allSongList: [Songs]) {
+    private func SongListDidFinishPlaying(_ notification: Notification, _ playList: [Songs]) {
         print("check is Finish Play")
 
         guard let finishedSong = currentSong else {
@@ -234,22 +62,37 @@ extension AudioPlayerViewModel {
 
         switch playMode {
         case .isDefaultMode:
-            guard let nextSong = getNextSong(for: finishedSong, playList: allSongList) else { return
-            }
-            if nextSong == allSongList.first {
-                //한바퀴 재생 완료
-                currentSong = nextSong
-                currentSong?.playerState = .stopped
+            if isShuffleMode {
+                player?.removeAllItems()
+                if let selectSongIndex = self.waitingSongs.firstIndex(of: finishedSong) {
+                    let temp = shuffleExceptIndex(array: self.waitingSongs, index: selectSongIndex)
+                    guard let nextSong = getNextSong(for: finishedSong, playList: temp) else { return }
+                    player?.insert(AVPlayerItem(url: URL(string:nextSong.songInfo.mp3Link)!), after: nil)
+                    currentSong = nextSong
+                    player?.play()
+                    addPeriodicTimeObserver()
+                    isPlaying = true
+                    currentSong?.playerState = .playing
+                    updateNowPlayingInfo()
+                }
             } else {
-                currentSong = nextSong
-                currentSong?.playerState = .playing
-                updateNowPlayingInfo()
-                addPeriodicTimeObserver()
+                guard let nextSong = getNextSong(for: finishedSong, playList: playList) else { return
+                }
+                if nextSong != playList.first {
+                    player?.insert(AVPlayerItem(url: URL(string:nextSong.songInfo.mp3Link)!), after: nil)
+                    currentSong = nextSong
+                    player?.play()
+                    addPeriodicTimeObserver()
+                    isPlaying = true
+                    currentSong?.playerState = .playing
+                    updateNowPlayingInfo()
+                }
             }
+            
         case .isInfinityMode:
-            guard let nextSong = getNextSong(for: finishedSong, playList: allSongList) else { return
+            guard let nextSong = getNextSong(for: finishedSong, playList: playList) else { return
             }
-            if nextSong == allSongList.first {
+            if nextSong == playList.first {
                 //한바퀴 재생 완료
                 playAllAudio()
             } else {
@@ -261,65 +104,171 @@ extension AudioPlayerViewModel {
             // TODO: 한곡 반복재생이랑 셔플모드 구현하기
         case .isOneSongInfinityMode:
             return
-
-        case .isShuffledMode:
-            return
-
         }
     }
 
-    // 개별 선택 노래 종료후 함수
-    private func songDidFinishPlaying(_ notification: Notification) {
+    func shuffleModeToggle() {
+        isShuffleMode.toggle()
+    }
 
-        guard let finishedSong = currentSong else {
-            print("in songDidFinshPlay error")
-            return
+    func checkCurrentSong() {
+        self.$currentSong
+            .receive(on: DispatchQueue.main)
+            .sink {
+            print("Check: \($0?.songInfo.title), \($0?.playerState)")
         }
-        finishedSong.playerState = .stopped
-        print("Check Finished PlayedSong :\(finishedSong.songInfo.title), \(finishedSong.playerState)")
+            .store(in: &cancellables)
+    }
 
-        removePeriodicTimeObserver()
-
-        switch playMode {
-        case .isDefaultMode:
-            guard let nextSong = getNextSong(for: finishedSong, playList: nil) else { return
-            }
-            if nextSong == filteredSongs.first {
-                //한바퀴 재생 완료
-                currentSong = nextSong
-                currentSong?.playerState = .stopped
+    func controlPlay(_ item: Songs) {
+        if item == currentSong {
+            if item.playerState == .playing {
+                pauseAudio()
             } else {
-                player?.insert(AVPlayerItem(url: URL(string: nextSong.songInfo.mp3Link)!), after: nil)
-                currentSong = nextSong
-                player?.play()
-                currentSong?.playerState = .playing
-                addPeriodicTimeObserver()
+                playAudio(selectSong: item)
             }
-        case .isInfinityMode:
-            guard let nextSong = getNextSong(for: finishedSong, playList: nil) else { return
-            }
-            if nextSong == filteredSongs.first {
-                //한바퀴 재생 완료
-                playAllAudio()
-            } else {
-                currentSong = nextSong
-                currentSong?.playerState = .playing
-                addPeriodicTimeObserver()
-            }
-            // TODO: 한곡 반복재생이랑 셔플모드 구현하기
-        case .isOneSongInfinityMode:
-            return
-
-        case .isShuffledMode:
-            return
-
+        } else {
+            playAudio(selectSong: item)
         }
+    }
+
+    func clearAVPlayer() {
+        removePeriodicTimeObserver() // 초단위 초기화
+        player?.pause() // 플레이어 정지
+        player?.removeAllItems() // 플레이어 초기화
+    }
+
+    func getNextSong(for song: Songs, playList: [Songs]) -> Songs? {
+        guard let currentIndex = playList.firstIndex(of: song) else { return nil }
+        let nextIndex = (currentIndex + 1) % playList.count
+        print("Next Song in 전체 선택 : \(playList[nextIndex].songInfo.title)")
+        return playList[nextIndex]
+    }
+
+    func shuffleExceptIndex<T>(array: [T], index: Int) -> [T] {
+        let element = array[index]
+        var remainingArray = array
+        remainingArray.remove(at: index)
+        remainingArray.shuffle()
+        return [element] + remainingArray
     }
 }
 
+// MARK: MusicPlayer 전체 재생 관련
 extension AudioPlayerViewModel {
+    // 전체 곡 재생
+    func playAllAudio() {
+        if player == nil {
+            player = AVQueuePlayer()
+        }
 
-    // MARK: - 시간 관찰자 관리
+        clearAVPlayer()
+
+        if isShuffleMode {
+            self.waitingSongs = filteredSongs.shuffled()
+        } else {
+            self.waitingSongs = filteredSongs
+        }
+
+        guard !self.waitingSongs.isEmpty else { return }
+
+        let items = self.waitingSongs.map { AVPlayerItem(url: URL(string: $0.songInfo.mp3Link)!) }
+
+        player = AVQueuePlayer(items: items)
+        player?.play()
+
+
+        currentSong = waitingSongs.first
+        currentSong?.playerState = .playing
+        addPeriodicTimeObserver()
+        isPlaying = true
+        updateNowPlayingInfo()
+    }
+
+
+
+    // 선택 곡 재생
+    func playAudio(selectSong: Songs) {
+        if player == nil {
+            player = AVQueuePlayer()
+        }
+
+        self.waitingSongs = filteredSongs
+
+        if currentSong == selectSong && player?.currentItem?.status == .readyToPlay {
+            player?.play()
+            isPlaying = true
+            currentSong?.playerState = .playing
+        } else {
+            if let selectSongIndex = self.waitingSongs.firstIndex(of: selectSong) {
+                clearAVPlayer()
+                // 선택한 노래부터 추가
+                player?.insert(AVPlayerItem(url: URL(string: self.waitingSongs[selectSongIndex].songInfo.mp3Link)!), after: nil)
+                // 선택한 노래 뒤 추가
+                for index in selectSongIndex + 1 ..< self.waitingSongs.count {
+                    let item = AVPlayerItem(url: URL(string: self.waitingSongs[index].songInfo.mp3Link)!)
+                    player?.insert(item, after: nil)
+                }
+                currentSong = selectSong
+                player?.play()
+                isPlaying = true
+                currentSong?.playerState = .playing
+                addPeriodicTimeObserver()
+            }
+        }
+
+        updateNowPlayingInfo()
+    }
+
+    func playShuffleAudio() {
+        isShuffleMode = true
+        playAllAudio()
+    }
+
+    // 이전 곡 재생
+    func playPreviousAudio() {
+        guard let currentSong = currentSong else {
+            print("현재 재생 중인 곡이 없습니다.")
+            return
+        }
+
+        guard let currentIndex = self.waitingSongs.firstIndex(of: currentSong) else {
+            print("현재 곡이 waitingSongs에 없습니다.")
+            return
+        }
+
+        let previousIndex = (currentIndex - 1 + waitingSongs.count) % waitingSongs.count
+        let previousSong = waitingSongs[previousIndex]
+
+
+        playAudio(selectSong: previousSong)
+    }
+
+    // 다음 곡 재생
+    func playNextAudio() {
+        if isShuffleMode {
+            if let selectSongIndex = self.waitingSongs.firstIndex(of: currentSong!) {
+                let temp = shuffleExceptIndex(array: self.waitingSongs, index: selectSongIndex)
+                playAudio(selectSong: getNextSong(for: currentSong!, playList: temp)!)
+            }
+        } else {
+            playAudio(selectSong: getNextSong(for: currentSong!, playList: self.waitingSongs)!)
+        }
+
+    }
+
+    // 곡 일시정지
+    func pauseAudio() {
+        player?.pause()
+        isPlaying = false
+        currentSong?.playerState = .paused
+    }
+
+}
+
+// MARK: - 시간 관찰자 관리
+extension AudioPlayerViewModel {
+    // 시간 관찰자 추가
     private func addPeriodicTimeObserver() {
         // 중복 등록 방지
         guard timeObserver == nil else { return }
@@ -387,9 +336,6 @@ extension AudioPlayerViewModel {
         let temp = stellaName == "스텔라이브" ? songInfoItems : songInfoItems.filter { $0.songInfo.singer.contains(stellaName) }
         filteredSongs = selectedSongType == .all ? temp : temp.filter { $0.songInfo.songType == selectedSongType.rawValue }
     }
-}
-
-extension AudioPlayerViewModel {
     func getPlayerIcon(for item: Songs) -> String {
         if currentSong == item {
             switch item.playerState {
@@ -401,21 +347,10 @@ extension AudioPlayerViewModel {
         }
         return "play.fill"
     }
-
-
-    func controlPlay(_ item: Songs) {
-        if item == currentSong {
-            if item.playerState == .playing {
-                pauseAudio()
-            } else {
-                playAudio(selectSong: item)
-            }
-        } else {
-            playAudio(selectSong: item)
-        }
-    }
 }
 
+
+// MARK: 제어센터 관련
 extension AudioPlayerViewModel {
 
     func MPNowPlayingInfoCenterSetting() {
@@ -457,7 +392,7 @@ extension AudioPlayerViewModel {
         guard let currentSong = currentSong else {
             return
         }
-        
+
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
         var nowPlayingInfo = [String: Any]()
         let singerName = makeSinger(currentSong.songInfo.singer)
@@ -495,4 +430,5 @@ extension AudioPlayerViewModel {
         }
     }
 }
+
 
