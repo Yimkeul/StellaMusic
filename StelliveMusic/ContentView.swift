@@ -19,16 +19,16 @@ struct ContentView: View {
     @StateObject private var audioPlayerViewModel: AudioPlayerViewModel = AudioPlayerViewModel()
 
     var body: some View {
-        TabView(selection: $selection) {
+//        TabView(selection: $selection) {
             HomeView()
                 .environmentObject(stellaInfoViewModel)
                 .environmentObject(songInfoViewModel)
                 .environmentObject(audioPlayerViewModel)
-                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
-                .tabItem {
-                Image(systemName: "music.note.house")
-                Text("홈")
-            }
+//                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
+//                .tabItem {
+//                Image(systemName: "music.note.house")
+//                Text("홈")
+//            }
 
                 .tag(0)
 
@@ -40,8 +40,8 @@ struct ContentView: View {
 //                Image(systemName: "play.square.stack")
 //                Text("보관함") }
 //                .tag(1)
-        }
-            .tint(.indigo)
+//        }
+//            .tint(.indigo)
 
             .safeAreaInset(edge: .bottom, content: {
             audioPlayerViewModel.currentSong != nil ? CustomBottomSheet() : nil
@@ -91,7 +91,7 @@ struct ContentView: View {
                 .fill(.gray.opacity(0.3))
                 .frame(height: 1)
         })
-            .offset(y: -49)
+//            .offset(y: -49)
     }
 }
 

@@ -163,11 +163,8 @@ struct ExpandedBottomSheet: View {
                     }
                         .frame(height: size.height / 2.5, alignment: .top)
                     HStack(spacing: size.width * 0.1) {
-                        // TODO: 업데이트 하기
                         Button {
                             audioPlayerViewModel.shuffleModeToggle()
-//                            audioPlayerViewModel.isShuffleMode.toggle()
-//                            audioPlayerViewModel.objectWillChange.send()
                         } label: {
                             Image(systemName: audioPlayerViewModel.isShuffleMode ? "shuffle.circle.fill" : "shuffle.circle")
                                 .font(.title3)
@@ -195,11 +192,10 @@ struct ExpandedBottomSheet: View {
                                 .font(size.height < 300 ? .title3 : .title2)
                         }
                         
-                        // TODO: 업데이트 하기
                         Button {
-
+                            audioPlayerViewModel.repeatModeToggle()
                         } label: {
-                            Image(systemName: "repeat") // toggle repeat.1
+                            Image(systemName: audioPlayerViewModel.getPlayerModeIcon())
                             .font(.title3)
 
                         }

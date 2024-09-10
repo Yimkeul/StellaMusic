@@ -23,7 +23,7 @@ struct SongListView: View {
                     let singer = audioPlayerViewModel.makeSinger(item.songInfo.singer)
                     SongListItem(item: item, singer: singer)
                         .onTapGesture {
-                            audioPlayerViewModel.controlPlay(item)
+                        audioPlayerViewModel.controlPlay(item)
                         songInfoviewModel.objectWillChange.send()
                     }
                 }
@@ -52,11 +52,20 @@ struct SongListView: View {
     private func SongListItem(item: Songs, singer: String) -> some View {
         VStack(spacing: 16) {
             HStack(alignment: .center) {
-                KFImage(URL(string: item.songInfo.thumbnail))
-                    .resizable()
+                ZStack(alignment: .center) {
+                    KFImage(URL(string: item.songInfo.thumbnail))
+                        .resizable()
+                        .frame(width: 70, height: 50)
+                        .cornerRadius(4)
+                        .scaledToFill()
+
+                    if item == audioPlayerViewModel.currentSong && audioPlayerViewModel.currentSong?.playerState == .playing {
+                        Color.black.opacity(0.8)
+                        PlayingAnimationBar()
+                            .frame(width: 15, height: 15)
+                    }
+                }
                     .frame(width: 70, height: 50)
-                    .cornerRadius(4)
-                    .scaledToFill()
                     .padding(.trailing, 8)
 
                 VStack {
@@ -76,8 +85,7 @@ struct SongListView: View {
                             audioPlayerViewModel.controlPlay(item)
                         } label: {
                             Image(systemName: audioPlayerViewModel.getPlayerIcon(for: item))
-                                
-
+                                .foregroundStyle(.indigo)
                         }.padding(.trailing, 4)
                             .onReceive(item.$playerState) { _ in
                             songInfoviewModel.objectWillChange.send()

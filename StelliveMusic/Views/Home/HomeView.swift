@@ -23,6 +23,7 @@ struct HomeView: View {
             SongListView(selectedSongType: $selectedSongType, stellaName: $stellaName)
         }
             .padding(.top, 1)
+            .padding(.bottom, 1)
             .onAppear {
             UIScrollView.appearance().bounces = false
         }
