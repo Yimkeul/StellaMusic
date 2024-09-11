@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftUIIntrospect
+import AVFoundation
 
 struct ContentView: View {
     @State private var selection = 0
@@ -18,28 +19,29 @@ struct ContentView: View {
     @StateObject private var audioPlayerViewModel: AudioPlayerViewModel = AudioPlayerViewModel()
 
     var body: some View {
-        TabView(selection: $selection) {
+//        TabView(selection: $selection) {
             HomeView()
                 .environmentObject(stellaInfoViewModel)
                 .environmentObject(songInfoViewModel)
                 .environmentObject(audioPlayerViewModel)
-                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
-                .tabItem {
-                Image(systemName: "music.note.house")
-                Text("홈")
-            }
+//                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
+//                .tabItem {
+//                Image(systemName: "music.note.house")
+//                Text("홈")
+//            }
 
                 .tag(0)
 
-            PlayListView()
-                .environmentObject(audioPlayerViewModel)
-                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
-                .tabItem {
-                Image(systemName: "play.square.stack")
-                Text("보관함") }
-                .tag(1)
-        }
-            .tint(.indigo)
+            // TODO: 업데이트 하기
+//            PlayListView()
+//                .environmentObject(audioPlayerViewModel)
+//                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
+//                .tabItem {
+//                Image(systemName: "play.square.stack")
+//                Text("보관함") }
+//                .tag(1)
+//        }
+//            .tint(.indigo)
 
             .safeAreaInset(edge: .bottom, content: {
             audioPlayerViewModel.currentSong != nil ? CustomBottomSheet() : nil
@@ -52,11 +54,15 @@ struct ContentView: View {
             }
         }
             .onAppear {
+                try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+                audioPlayerViewModel.checkCurrentSong()
+                audioPlayerViewModel.MPNowPlayingInfoCenterSetting()
             Task {
                 await stellaInfoViewModel
                     .fetchData()
                 await songInfoViewModel.fetchData()
             }
+                
 
         }
 
@@ -85,7 +91,7 @@ struct ContentView: View {
                 .fill(.gray.opacity(0.3))
                 .frame(height: 1)
         })
-            .offset(y: -49)
+//            .offset(y: -49)
     }
 }
 

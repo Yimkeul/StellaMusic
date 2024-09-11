@@ -46,7 +46,7 @@ struct MusicProgressSlider<T: BinaryFloatingPoint>: View {
                     }
                         .font(.system(.headline, design: .rounded))
                         .monospacedDigit()
-                        .foregroundColor(isActive ? fillColor : emptyColor)
+                        .foregroundColor(emptyColor)
                 }
                     .frame(width: bounds.size.width, alignment: .center)
             }
@@ -92,7 +92,7 @@ struct MusicProgressSlider<T: BinaryFloatingPoint>: View {
 
     // 애니메이션 설정: 드래그 중일 때는 부드럽게 확장되고, 드래그가 끝나면 원래 크기로 돌아감
     private var animation: Animation {
-            .spring(response: 0.4, dampingFraction: 0.7, blendDuration: 0.5) // 자연스러운 애니메이션
+            .spring(response: 0.5, dampingFraction: 0.8, blendDuration: 0.5) // 자연스러운 애니메이션
     }
 
     // 현재 진행 비율을 계산
