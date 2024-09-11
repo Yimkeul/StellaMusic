@@ -21,6 +21,8 @@ struct ExpandedBottomSheet: View {
     @State private var value: Double = 0
     @State private var maxValue: Double = 0
 
+    @State private var isButtonDisabled: Bool = false // true면 사용 못함
+
     var body: some View {
         if let currentSong = audioPlayerViewModel.currentSong {
             GeometryReader {
@@ -117,15 +119,15 @@ struct ExpandedBottomSheet: View {
                 let spacing = size.height * 0.04
                 VStack(spacing: spacing) {
                     VStack(spacing: spacing) {
-                        HStack(alignment: .center, spacing: 15) {
+                        HStack(alignment: .center) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(currentSong.songInfo.title)
                                     .font(.system(.title2, design: .rounded))
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.primary)
                                     .lineLimit(nil) // 줄 수 제한 없음
-                                    .multilineTextAlignment(.leading) // 왼쪽 정렬
-                                    .fixedSize(horizontal: false, vertical: true)
+                                .multilineTextAlignment(.leading) // 왼쪽 정렬
+                                .fixedSize(horizontal: false, vertical: true)
                                     .padding(.top, 16)
                                 let singer = audioPlayerViewModel.makeSinger(currentSong.songInfo.singer)
                                 Text(singer)
@@ -134,6 +136,7 @@ struct ExpandedBottomSheet: View {
                                     .foregroundStyle(.white.opacity(0.8))
                             }
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.trailing, 8)
 
                             // TODO: 업데이트 하기
 //                            Button {
@@ -148,6 +151,7 @@ struct ExpandedBottomSheet: View {
 //                                        .environment(\.colorScheme, .light)
 //                                }
 //                            }
+
                         }
                         // MARK: TimeLine
                         if maxValue != 0 {
@@ -158,7 +162,8 @@ struct ExpandedBottomSheet: View {
 
                             }
                         } else {
-                            MusicEmptyProgressSlider(activeFillColor: Color.white, fillColor: Color.indigo, emptyColor: Color.white.opacity(0.8), height: 32)
+                            ProgressView()
+                                .progressViewStyle(.circular)
                         }
                     }
                         .frame(height: size.height / 2.5, alignment: .top)
@@ -191,17 +196,18 @@ struct ExpandedBottomSheet: View {
                             Image(systemName: "forward.fill")
                                 .font(size.height < 300 ? .title3 : .title2)
                         }
-                        
+
                         Button {
                             audioPlayerViewModel.repeatModeToggle()
                         } label: {
                             Image(systemName: audioPlayerViewModel.getPlayerModeIcon())
-                            .font(.title3)
+                                .font(.title3)
 
                         }
 
                     }
-                    .foregroundColor(.white.opacity(0.8))
+                        .disabled(isButtonDisabled)
+                        .foregroundColor(.white.opacity(0.8))
                         .frame(maxHeight: .infinity)
                 }
             }
@@ -211,9 +217,11 @@ struct ExpandedBottomSheet: View {
                     .sink {
                     value = $0
                     maxValue = $1
+                    isButtonDisabled = maxValue == 0
                 }
                     .store(in: &audioPlayerViewModel.cancellables)
             }
+
         }
     }
 }

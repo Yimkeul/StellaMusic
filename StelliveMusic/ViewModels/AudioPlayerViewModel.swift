@@ -199,17 +199,57 @@ extension AudioPlayerViewModel {
             return
         }
 
+        // 현재 재생 시간이 1초 이상이면 현재 곡 처음으로 이동
+        if currentTime > 1 {
+            seekToTime(0)  // 0초로 이동
+            return
+        }
+
         guard let currentIndex = self.waitingSongs.firstIndex(of: currentSong) else {
             print("현재 곡이 waitingSongs에 없습니다.")
             return
         }
 
-        let previousIndex = (currentIndex - 1 + waitingSongs.count) % waitingSongs.count
-        let previousSong = waitingSongs[previousIndex]
+        if isShuffleMode {
+            // 셔플 모드에서는 첫 곡에서 이전 곡 재생 시 재생 멈춤
+            if currentIndex == 0 {
+                stopPlayback()  // 재생 멈춤 함수 호출
+            } else {
+                // 이전 곡을 재생
+                let previousSong = waitingSongs[currentIndex - 1]
+                playAudio(selectSong: previousSong)
+            }
+            return
+        }
 
+        // PlayMode에 따른 동작
+        switch playMode {
+        case .isDefaultMode:
+            if currentIndex == 0 {
+                stopPlayback()  // 처음 곡에서 이전 곡 재생 시 멈춤
+            } else {
+                let previousSong = waitingSongs[currentIndex - 1]
+                playAudio(selectSong: previousSong)
+            }
 
-        playAudio(selectSong: previousSong)
+        case .isInfinityMode:
+            // 처음 곡에서 이전 곡을 재생하면 마지막 곡으로 이동
+            let previousIndex = (currentIndex - 1 + waitingSongs.count) % waitingSongs.count
+            let previousSong = waitingSongs[previousIndex]
+            playAudio(selectSong: previousSong)
+
+        case .isOneSongInfinityMode:
+            // 나중에 구현할 내용
+            break
+        }
     }
+
+    private func stopPlayback() {
+        player?.pause()
+        isPlaying = false
+        currentSong?.playerState = .stopped
+    }
+
 
     func playNextAudio() {
         let targetTime = CMTime(seconds: max(self.duration - 1, 0), preferredTimescale: 600) // 끝시간에서 1초를 뺀 시간으로 변환
