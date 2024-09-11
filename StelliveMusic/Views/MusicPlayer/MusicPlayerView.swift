@@ -42,10 +42,8 @@ struct MusicPlayerView: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
                         .padding(.horizontal, 15)
-
                     Spacer(minLength: 0)
                 }
-                    .padding(.trailing, 16)
                     .contentShape(Rectangle())
                     .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.3)) {
@@ -64,6 +62,7 @@ struct MusicPlayerView: View {
                             .font(.title2)
                     }
                         .foregroundColor(.indigo)
+                        .padding(.leading, 16)
 
                     Button {
                         audioPlayerViewModel.playNextAudio()
