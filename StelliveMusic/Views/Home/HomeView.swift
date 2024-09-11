@@ -21,6 +21,12 @@ struct HomeView: View {
             TabsView(selectedSongType: $selectedSongType)
             PlayButtonArea()
             SongListView(selectedSongType: $selectedSongType, stellaName: $stellaName)
+            Divider()
+            Text("STELLIVE MUSIC은 스텔라이브 공식 앱이 아님을 밝히며, 팬이 제작한 앱입니다.\nSTELLIVE MUSIC에서 제공하는 모든 콘텐츠의 대한 저작권은 스텔라이브(STELLIVE) 및 강지(정도현)에게 귀속됩니다.\nSTELLIVE MUSIC은 어떠한 개인의 수익 창출을 하지 않음을 밝합니다.")
+                .padding(.horizontal, 16)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.primary.opacity(0.5))
+            
         }
             .padding(.top, 1)
             .padding(.bottom, 1)
@@ -36,8 +42,11 @@ struct HomeView: View {
 
     @ViewBuilder
     private func Title() -> some View {
-        HStack {
-            Text("스텔라이브 뮤직")
+        HStack(alignment: .center) {
+            Image("Logo")
+                .resizable()
+                .frame(width: 35, height: 35)
+            Text("STELLIVE MUSIC")
                 .font(.title)
                 .fontWeight(.bold)
             Spacer()
@@ -54,7 +63,7 @@ struct HomeView: View {
             } label: {
                 PlayButton(.all)
             }
-            
+
             Button {
                 audioViewModel.playShuffleAudio()
             } label: {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		861095012C8D72EC0027DF07 /* MusicProgressSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861095002C8D72EC0027DF07 /* MusicProgressSlider.swift */; };
 		861095042C8D73250027DF07 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861095032C8D73250027DF07 /* Double+Extension.swift */; };
+		861384BE2C91EEB900DC2C38 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 861384BD2C91EEB900DC2C38 /* Launch Screen.storyboard */; };
 		861C68B42C88FE9D003DCF8F /* SupaClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861C68B32C88FE9D003DCF8F /* SupaClient.swift */; };
 		861C68B72C88FEC2003DCF8F /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 861C68B62C88FEC2003DCF8F /* Supabase */; };
 		861C68B92C88FF1A003DCF8F /* SupabaseInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 861C68B82C88FF1A003DCF8F /* SupabaseInfo.plist */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		861095002C8D72EC0027DF07 /* MusicProgressSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicProgressSlider.swift; sourceTree = "<group>"; };
 		861095032C8D73250027DF07 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
+		861384BD2C91EEB900DC2C38 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		861C68B32C88FE9D003DCF8F /* SupaClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupaClient.swift; sourceTree = "<group>"; };
 		861C68B82C88FF1A003DCF8F /* SupabaseInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SupabaseInfo.plist; sourceTree = "<group>"; };
 		861C68BB2C88FFDE003DCF8F /* StellaInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellaInfo.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				868D1FC92C876B3A00F194D9 /* StelliveMusicApp.swift */,
 				868D1FCD2C876B3B00F194D9 /* Assets.xcassets */,
 				861C68BF2C89181C003DCF8F /* Colors.xcassets */,
+				861384BD2C91EEB900DC2C38 /* Launch Screen.storyboard */,
 				868D1FCF2C876B3B00F194D9 /* Preview Content */,
 			);
 			path = StelliveMusic;
@@ -281,6 +284,7 @@
 				861C68B92C88FF1A003DCF8F /* SupabaseInfo.plist in Resources */,
 				861C68C02C89181C003DCF8F /* Colors.xcassets in Resources */,
 				868D1FD12C876B3B00F194D9 /* Preview Assets.xcassets in Resources */,
+				861384BE2C91EEB900DC2C38 /* Launch Screen.storyboard in Resources */,
 				868D1FCE2C876B3B00F194D9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,9 +458,9 @@
 				INFOPLIST_FILE = StelliveMusic/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -493,9 +497,9 @@
 				INFOPLIST_FILE = StelliveMusic/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
