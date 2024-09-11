@@ -5,7 +5,6 @@
 //  Created by yimkeul on 9/4/24.
 //
 
-import Foundation
 import SwiftUI
 import Kingfisher
 

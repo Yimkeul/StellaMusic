@@ -13,7 +13,7 @@ struct TabsView: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(alignment: .top, spacing: 10) {
+            HStack(alignment: .top, spacing: 8) {
                 ForEach(SongType.allCases) { type in
                     TabButton(type: type, isSelected: selectedSongType == type)
                         .onTapGesture {

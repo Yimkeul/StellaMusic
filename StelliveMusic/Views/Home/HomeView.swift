@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftUIIntrospect
 
 struct HomeView: View {
+    @EnvironmentObject var audioViewModel: AudioPlayerViewModel
     @State private var selectedSongType: SongType = .all
     @State private var stellaName: String = "스텔라이브"
 
@@ -22,6 +23,7 @@ struct HomeView: View {
             SongListView(selectedSongType: $selectedSongType, stellaName: $stellaName)
         }
             .padding(.top, 1)
+            .padding(.bottom, 1)
             .onAppear {
             UIScrollView.appearance().bounces = false
         }
@@ -46,21 +48,25 @@ struct HomeView: View {
     private func PlayButtonArea() -> some View {
         HStack(spacing: 16) {
             Spacer()
-            Button(action: { }
-                   , label: {
-                       PlayButton(.all)
-                   })
-            Button(action: { }
-                   , label: {
-                       PlayButton(.random)
-                   })
+
+            Button {
+                audioViewModel.playAllAudio()
+            } label: {
+                PlayButton(.all)
+            }
+            
+            Button {
+                audioViewModel.playShuffleAudio()
+            } label: {
+                PlayButton(.random)
+            }
 
             Spacer()
         }.padding(.vertical, 16)
     }
 
     enum PlayButtonType: String {
-        case all = "전체재생"
+        case all = "재생"
         case random = "랜덤재생"
     }
 
@@ -83,10 +89,4 @@ struct HomeView: View {
         }
             .environment(\.colorScheme, colorScheme)
     }
-
-}
-
-
-#Preview {
-    HomeView()
 }

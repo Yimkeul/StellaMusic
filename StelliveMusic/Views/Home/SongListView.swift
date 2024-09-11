@@ -5,83 +5,98 @@
 //  Created by yimkeul on 9/4/24.
 //
 
-import Foundation
 import SwiftUI
 import Kingfisher
+import Combine
 
 struct SongListView: View {
-    @EnvironmentObject var viewModel: SongInfoViewModel
+    @EnvironmentObject var songInfoviewModel: SongInfoViewModel
+    @EnvironmentObject var audioPlayerViewModel: AudioPlayerViewModel
 
     @Binding var selectedSongType: SongType
     @Binding var stellaName: String
 
-    var filterDB: [SongInfo] {
-        var filteredSongs: [SongInfo]
-
-        if stellaName == "스텔라이브" {
-            filteredSongs = selectedSongType == .all ? viewModel.songInfoItems : viewModel.songInfoItems.filter {
-                $0.songType == selectedSongType.rawValue
-            }
-        } else {
-            let temp = viewModel.songInfoItems.filter { $0.singer.contains(stellaName) }
-            return selectedSongType == .all ? temp : temp.filter { $0.songType == selectedSongType.rawValue }
-
-        }
-        return filteredSongs
-    }
-
-
     var body: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(spacing: 8) {
-                ForEach(filterDB, id: \.self) { item in
-                    let singer = makeSinger(item.singer)
+                ForEach(audioPlayerViewModel.filteredSongs, id: \.self) { item in
+                    let singer = audioPlayerViewModel.makeSinger(item.songInfo.singer)
                     SongListItem(item: item, singer: singer)
+                        .onTapGesture {
+                        audioPlayerViewModel.controlPlay(item)
+                        songInfoviewModel.objectWillChange.send()
+                    }
                 }
             }
         }
             .padding(16)
+            .onAppear {
+
+            songInfoviewModel.$songInfoItems
+                .receive(on: DispatchQueue.main)
+                .sink { [weak audioPlayerViewModel] newSongs in
+                audioPlayerViewModel?.filterSongs(songInfoItems: newSongs, selectedSongType: selectedSongType, stellaName: stellaName)
+            }
+                .store(in: &audioPlayerViewModel.cancellables)
+
+        }
+            .onChange(of: selectedSongType) { newType in
+            audioPlayerViewModel.filterSongs(songInfoItems: songInfoviewModel.songInfoItems, selectedSongType: newType, stellaName: stellaName)
+        }
+            .onChange(of: stellaName) { newName in
+            audioPlayerViewModel.filterSongs(songInfoItems: songInfoviewModel.songInfoItems, selectedSongType: selectedSongType, stellaName: newName)
+        }
     }
-
-
-
-    private func makeSinger(_ singers: [String]) -> String {
-        return singers.joined(separator: " & ")
-    }
-
-
 
     @ViewBuilder
-    private func SongListItem(item: SongInfo, singer: String) -> some View {
+    private func SongListItem(item: Songs, singer: String) -> some View {
         VStack(spacing: 16) {
             HStack(alignment: .center) {
-                KFImage(URL(string: item.thumbnail))
-                    .resizable()
+                ZStack(alignment: .center) {
+                    KFImage(URL(string: item.songInfo.thumbnail))
+                        .resizable()
+                        .frame(width: 70, height: 50)
+                        .cornerRadius(4)
+                        .scaledToFill()
+
+                    if item == audioPlayerViewModel.currentSong && audioPlayerViewModel.currentSong?.playerState == .playing {
+                        Color.black.opacity(0.8)
+                        PlayingAnimationBar()
+                            .frame(width: 15, height: 15)
+                    }
+                }
                     .frame(width: 70, height: 50)
-                    .cornerRadius(4)
-                    .scaledToFill()
                     .padding(.trailing, 8)
 
                 VStack {
                     HStack {
-                        VStack (alignment: .leading, spacing: 8) {
-                            Text(item.title)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(item.songInfo.title)
                                 .font(.system(size: 18, weight: .bold))
+                                .lineLimit(1)
 
                             Text(singer)
                                 .font(.system(size: 14, weight: .semibold))
                         }
 
                         Spacer()
-                        Button(action: /*@START_MENU_TOKEN@*/ { }/*@END_MENU_TOKEN@*/, label: {
-                            Image(systemName: "heart.fill")
-                        })
+
+                        Button {
+                            audioPlayerViewModel.controlPlay(item)
+                        } label: {
+                            Image(systemName: audioPlayerViewModel.getPlayerIcon(for: item))
+                                .foregroundStyle(.indigo)
+                        }.padding(.trailing, 4)
+                            .onReceive(item.$playerState) { _ in
+                            songInfoviewModel.objectWillChange.send()
+                        }
+
                     }
                     Spacer()
                     Divider()
                 }
             }
-
         }
+            .contentShape(Rectangle())
     }
 }
