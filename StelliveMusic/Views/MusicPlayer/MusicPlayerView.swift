@@ -12,6 +12,7 @@ struct MusicPlayerView: View {
     @EnvironmentObject var audioPlayerViewModel: AudioPlayerViewModel
     @Binding var expandSheet: Bool
     var animation: Namespace.ID
+    @State private var isFinishLoadingSong: Bool = false
 
     var body: some View {
         if let currentSong = audioPlayerViewModel.currentSong {
@@ -29,41 +30,59 @@ struct MusicPlayerView: View {
                             .matchedGeometryEffect(id: "ARTWORK", in: animation)
                     }
                 }.frame(width: 45, height: 45)
-
-                Text(currentSong.songInfo.title)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .padding(.horizontal, 15)
-                Spacer(minLength: 0)
-
-
-                Button {
-                    audioPlayerViewModel.controlPlay(currentSong)
-                } label: {
-                    Image(systemName: audioPlayerViewModel.getPlayerIcon(for: currentSong))
-                        .font(.title2)
+                    .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        expandSheet = true
+                    }
                 }
-                    .foregroundColor(.indigo)
 
-                Button {
-                    audioPlayerViewModel.playNextAudio()
-                } label: {
-                    Image(systemName: "forward.fill")
-                        .font(.title2)
-                }.padding(.leading, 25)
-                    .foregroundColor(.indigo)
+                HStack(spacing: 0) {
+                    Text(currentSong.songInfo.title)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                        .padding(.horizontal, 15)
 
+                    Spacer(minLength: 0)
+                }
+                    .padding(.trailing, 16)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        expandSheet = true
+                    }
+                }
 
+                if isFinishLoadingSong {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                } else {
+                    Button {
+                        audioPlayerViewModel.controlPlay(currentSong)
+                    } label: {
+                        Image(systemName: audioPlayerViewModel.getPlayerIcon(for: currentSong))
+                            .font(.title2)
+                    }
+                        .foregroundColor(.indigo)
+
+                    Button {
+                        audioPlayerViewModel.playNextAudio()
+                    } label: {
+                        Image(systemName: "forward.fill")
+                            .font(.title2)
+                    }.padding(.leading, 25)
+                        .foregroundColor(.indigo)
+                }
             }
                 .padding(.horizontal)
                 .padding(.bottom, 5)
                 .frame(height: 70)
-                .containerShape(Rectangle())
-                .onTapGesture {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        expandSheet = true
-                    }
+                .onAppear() {
+                audioPlayerViewModel.$duration
+                    .sink {
+                    isFinishLoadingSong = $0 == 0
+                }
+                    .store(in: &audioPlayerViewModel.cancellables)
             }
         }
     }
