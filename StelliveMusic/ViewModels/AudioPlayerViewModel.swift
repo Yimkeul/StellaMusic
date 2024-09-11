@@ -294,20 +294,20 @@ extension AudioPlayerViewModel {
         // 현재 플레이어에 있는 대기열을 가져옴
         guard let currentItems = player?.items(), !currentItems.isEmpty else { return }
 
-        for i in 1 ..< self.waitingSongs.count {
-            if let test = currentItems[i].asset as? AVURLAsset {
+        for i in 1 ..< currentItems.count {
+//            if let test = currentItems[i].asset as? AVURLAsset {
 //                print("remove target : \(test.url) -- \(player?.items().count)")
-            }
+//            }
             player?.remove(currentItems[i])
-//            print("Remove result : \(player?.items().count)")
+            print("Remove result : \(player?.items().count)")
         }
 
+        
         for i in 1 ..< self.waitingSongs.count {
             let item = AVPlayerItem(url: URL(string: self.waitingSongs[i].songInfo.mp3Link)!)
             player?.insert(item, after: nil)
-//            print("Add result : \(player?.items().count)")
+            print("Add result : \(player?.items().count)")
         }
-
     }
 
     func repeatModeToggle() {
@@ -387,7 +387,8 @@ extension AudioPlayerViewModel {
 
     func filterSongs(songInfoItems: [Songs], selectedSongType: SongType, stellaName: String) {
         let temp = stellaName == "스텔라이브" ? songInfoItems : songInfoItems.filter { $0.songInfo.singer.contains(stellaName) }
-        filteredSongs = selectedSongType == .all ? temp : temp.filter { $0.songInfo.songType == selectedSongType.rawValue }
+        filteredSongs = selectedSongType == .all ? temp.sorted { $0.songInfo.registrationDate > $1.songInfo.registrationDate} :
+        temp.filter { $0.songInfo.songType == selectedSongType.rawValue }.sorted { $0.songInfo.registrationDate > $1.songInfo.registrationDate }
     }
 
     func getPlayerIcon(for item: Songs) -> String {

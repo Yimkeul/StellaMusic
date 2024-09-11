@@ -162,8 +162,11 @@ struct ExpandedBottomSheet: View {
 
                             }
                         } else {
-                            ProgressView()
-                                .progressViewStyle(.circular)
+                            if currentSong.playerState != .stopped {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                            }
+                            
                         }
                     }
                         .frame(height: size.height / 2.5, alignment: .top)
@@ -213,11 +216,16 @@ struct ExpandedBottomSheet: View {
             }
                 .padding(.horizontal, 25)
                 .onAppear() {
-                Publishers.CombineLatest(audioPlayerViewModel.$currentTime, audioPlayerViewModel.$duration)
-                    .sink {
-                    value = $0
-                    maxValue = $1
-                    isButtonDisabled = maxValue == 0
+                    Publishers.CombineLatest3(audioPlayerViewModel.$currentTime, audioPlayerViewModel.$duration, audioPlayerViewModel.$currentSong)
+                        .receive(on: DispatchQueue.main)
+                    .sink { (currentTime, duration, playerState) in
+                    value = currentTime
+                    maxValue = duration
+                    if duration == 0 && playerState?.playerState == .playing {
+                        isButtonDisabled = true
+                    } else {
+                        isButtonDisabled = false
+                    }
                 }
                     .store(in: &audioPlayerViewModel.cancellables)
             }

@@ -7,12 +7,13 @@
 
 import SwiftUI
 import Kingfisher
+import Combine
 
 struct MusicPlayerView: View {
     @EnvironmentObject var audioPlayerViewModel: AudioPlayerViewModel
     @Binding var expandSheet: Bool
     var animation: Namespace.ID
-    @State private var isFinishLoadingSong: Bool = false
+    @State private var isLoadingSong: Bool = false
 
     var body: some View {
         if let currentSong = audioPlayerViewModel.currentSong {
@@ -51,7 +52,7 @@ struct MusicPlayerView: View {
                     }
                 }
 
-                if isFinishLoadingSong {
+                if isLoadingSong {
                     ProgressView()
                         .progressViewStyle(.circular)
                 } else {
@@ -77,9 +78,14 @@ struct MusicPlayerView: View {
                 .padding(.bottom, 5)
                 .frame(height: 70)
                 .onAppear() {
-                audioPlayerViewModel.$duration
-                    .sink {
-                    isFinishLoadingSong = $0 == 0
+                Publishers.CombineLatest(audioPlayerViewModel.$duration, audioPlayerViewModel.$currentSong)
+                    .receive(on: DispatchQueue.main)
+                    .sink { (duration, playerState) in
+                    if duration == 0 && playerState?.playerState == .playing {
+                        isLoadingSong = true
+                    } else {
+                        isLoadingSong = false
+                    }
                 }
                     .store(in: &audioPlayerViewModel.cancellables)
             }

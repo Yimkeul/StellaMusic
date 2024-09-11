@@ -19,7 +19,12 @@ class SongInfoViewModel: ObservableObject {
     let client = SupaClient.shared.setClient()
     
     func sortData(_ item: [Songs]) -> [Songs] {
-        return item.sorted { $0.songInfo.id < $1.songInfo.id }
+        return item.sorted {
+            if $0.songInfo.registrationDate == $1.songInfo.registrationDate {
+                return $0.songInfo.id > $1.songInfo.id
+            }
+            return $0.songInfo.registrationDate > $1.songInfo.registrationDate
+        }
     }
 
     func fetchData() async {
