@@ -127,7 +127,7 @@ struct ExpandedBottomSheet: View {
                                 Text(currentSong.songInfo.title)
                                     .font(.system(.title2, design: .rounded))
                                     .fontWeight(.semibold)
-                                    .foregroundStyle(.primary)
+                                    .foregroundStyle(.white)
                                     .lineLimit(nil) // 줄 수 제한 없음
                                 .multilineTextAlignment(.leading) // 왼쪽 정렬
                                 .fixedSize(horizontal: false, vertical: true)
