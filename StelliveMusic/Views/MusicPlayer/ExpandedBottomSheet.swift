@@ -22,6 +22,7 @@ struct ExpandedBottomSheet: View {
     @State private var maxValue: Double = 0
 
     @State private var isButtonDisabled: Bool = false // true면 사용 못함
+    @State private var isDragging: Bool = false
 
     var body: some View {
         if let currentSong = audioPlayerViewModel.currentSong {
@@ -87,10 +88,12 @@ struct ExpandedBottomSheet: View {
                     DragGesture()
                         .onChanged({ value in
                         let translationY = value.translation.height
+                        isDragging = true
                         withAnimation(.easeInOut(duration: 0.3)) {
                             offsetY = (translationY > 0 ? translationY : 0)
                         }
                     }).onEnded({ value in
+                        isDragging = false
                         withAnimation(.easeInOut(duration: 0.3)) {
                             if offsetY > size.height * 0.4 {
                                 expandSheet = false
@@ -159,14 +162,15 @@ struct ExpandedBottomSheet: View {
                                 if !edit {
                                     audioPlayerViewModel.seekToTime(value)
                                 }
-
                             }
+                            .opacity(isDragging ? 0 : 1)
+                            .animation(.easeInOut(duration: 0.1), value: isDragging)
                         } else {
                             if currentSong.playerState != .stopped {
                                 ProgressView()
                                     .progressViewStyle(.circular)
                             }
-                            
+
                         }
                     }
                         .frame(height: size.height / 2.5, alignment: .top)
@@ -216,8 +220,8 @@ struct ExpandedBottomSheet: View {
             }
                 .padding(.horizontal, 25)
                 .onAppear() {
-                    Publishers.CombineLatest3(audioPlayerViewModel.$currentTime, audioPlayerViewModel.$duration, audioPlayerViewModel.$currentSong)
-                        .receive(on: DispatchQueue.main)
+                Publishers.CombineLatest3(audioPlayerViewModel.$currentTime, audioPlayerViewModel.$duration, audioPlayerViewModel.$currentSong)
+                    .receive(on: DispatchQueue.main)
                     .sink { (currentTime, duration, playerState) in
                     value = currentTime
                     maxValue = duration

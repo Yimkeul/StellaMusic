@@ -67,9 +67,9 @@ class AudioPlayerViewModel: ObservableObject {
 
             } else if nextSong != self.waitingSongs.first {
                 currentSong = nextSong
-                addPeriodicTimeObserver()
                 currentSong?.playerState = .playing
                 updateNowPlayingInfo()
+                addPeriodicTimeObserver()
             }
 
         case .isInfinityMode:
@@ -129,6 +129,8 @@ extension AudioPlayerViewModel {
             player?.play()
             isPlaying = true
             currentSong?.playerState = .playing
+            addPeriodicTimeObserver()
+            updateNowPlayingInfo()
             return
         }
 
@@ -249,7 +251,6 @@ extension AudioPlayerViewModel {
         isPlaying = false
         currentSong?.playerState = .stopped
     }
-
 
     func playNextAudio() {
         let targetTime = CMTime(seconds: max(self.duration - 1, 0), preferredTimescale: 600) // 끝시간에서 1초를 뺀 시간으로 변환
