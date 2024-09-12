@@ -17,12 +17,12 @@ struct ExpandedBottomSheet: View {
 
     @State private var animateContent: Bool = false
     @State private var offsetY: CGFloat = 0
+    @State private var subOffsetY: CGFloat = 0
 
     @State private var value: Double = 0
     @State private var maxValue: Double = 0
 
     @State private var isButtonDisabled: Bool = false // true면 사용 못함
-    @State private var isDragging: Bool = false
 
     var body: some View {
         if let currentSong = audioPlayerViewModel.currentSong {
@@ -88,12 +88,14 @@ struct ExpandedBottomSheet: View {
                     DragGesture()
                         .onChanged({ value in
                         let translationY = value.translation.height
-                        isDragging = true
+                        subOffsetY = (translationY > 0 ? translationY : 0)
                         withAnimation(.easeInOut(duration: 0.3)) {
                             offsetY = (translationY > 0 ? translationY : 0)
                         }
                     }).onEnded({ value in
-                        isDragging = false
+                        if subOffsetY <= size.height * 0.4 {
+                            subOffsetY = .zero
+                        }
                         withAnimation(.easeInOut(duration: 0.3)) {
                             if offsetY > size.height * 0.4 {
                                 expandSheet = false
@@ -163,8 +165,8 @@ struct ExpandedBottomSheet: View {
                                     audioPlayerViewModel.seekToTime(value)
                                 }
                             }
-                            .opacity(isDragging ? 0 : 1)
-                            .animation(.easeInOut(duration: 0.1), value: isDragging)
+                                .opacity(subOffsetY == .zero ? 1 : 0)
+
                         } else {
                             if currentSong.playerState != .stopped {
                                 ProgressView()

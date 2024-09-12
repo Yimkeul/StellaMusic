@@ -81,7 +81,8 @@ struct MusicProgressSlider<T: BinaryFloatingPoint>: View {
                 .onChange(of: value) { newValue in
                 // 슬라이더가 조작 중이지 않을 때만 업데이트
                 if !isActive {
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) { // 애니메이션 적용
+//                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) 
+                    withAnimation(.easeInOut(duration: 0.1)) { // 애니메이션 적용
                         localRealProgress = getPrgPercentage(newValue)
                     }
                 }

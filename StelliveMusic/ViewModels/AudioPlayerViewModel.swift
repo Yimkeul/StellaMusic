@@ -48,7 +48,6 @@ class AudioPlayerViewModel: ObservableObject {
         // 오디오 포커스를 잃었을때
         NotificationCenter.default.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
-            // 여기 채워줘 gpt!
             if let userInfo = notification.userInfo,
                 let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
                 let type = AVAudioSession.InterruptionType(rawValue: typeValue) {
