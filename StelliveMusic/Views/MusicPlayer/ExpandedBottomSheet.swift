@@ -226,7 +226,9 @@ struct ExpandedBottomSheet: View {
                     .receive(on: DispatchQueue.main)
                     .sink { (currentTime, duration, playerState) in
                     value = currentTime
-                    maxValue = duration
+                    if maxValue != duration {
+                        maxValue = duration
+                    }
                     if duration == 0 && playerState?.playerState == .playing {
                         isButtonDisabled = true
                     } else {
