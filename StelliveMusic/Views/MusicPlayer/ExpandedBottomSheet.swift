@@ -17,12 +17,14 @@ struct ExpandedBottomSheet: View {
 
     @State private var animateContent: Bool = false
     @State private var offsetY: CGFloat = 0
-    @State private var subOffsetY: CGFloat = 0
 
     @State private var value: Double = 0
     @State private var maxValue: Double = 0
 
     @State private var isButtonDisabled: Bool = false // true면 사용 못함
+    @State private var setHiddenProgressBar: Bool = false
+
+
 
     var body: some View {
         if let currentSong = audioPlayerViewModel.currentSong {
@@ -88,14 +90,10 @@ struct ExpandedBottomSheet: View {
                     DragGesture()
                         .onChanged({ value in
                         let translationY = value.translation.height
-                        subOffsetY = (translationY > 0 ? translationY : 0)
                         withAnimation(.easeInOut(duration: 0.3)) {
                             offsetY = (translationY > 0 ? translationY : 0)
                         }
                     }).onEnded({ value in
-                        if subOffsetY <= size.height * 0.4 {
-                            subOffsetY = .zero
-                        }
                         withAnimation(.easeInOut(duration: 0.3)) {
                             if offsetY > size.height * 0.4 {
                                 expandSheet = false
@@ -160,13 +158,18 @@ struct ExpandedBottomSheet: View {
                         }
                         // MARK: TimeLine
                         if maxValue != 0 {
-                            MusicProgressSlider(value: $value, inRange: .constant(0...maxValue), activeFillColor: Color.indigo, fillColor: Color.indigo, emptyColor: Color.white.opacity(0.8), height: 32) { edit in
-                                if !edit {
+                            MusicProgressSlider(value: $value, inRange: .constant(0...maxValue), activeFillColor: Color.indigo, fillColor: Color.indigo, emptyColor: Color.white.opacity(0.8), height: 32) { editing in
+                                if editing {
+                                    DispatchQueue.main.async {
+                                        audioPlayerViewModel.isScrubbingInProgress = true
+                                    }
+                                } else {
                                     audioPlayerViewModel.seekToTime(value)
+                                    DispatchQueue.main.async {
+                                        audioPlayerViewModel.isScrubbingInProgress = false
+                                    }
                                 }
                             }
-                                .opacity(subOffsetY == .zero ? 1 : 0)
-
                         } else {
                             if currentSong.playerState != .stopped {
                                 ProgressView()
@@ -225,14 +228,16 @@ struct ExpandedBottomSheet: View {
                 Publishers.CombineLatest3(audioPlayerViewModel.$currentTime, audioPlayerViewModel.$duration, audioPlayerViewModel.$currentSong)
                     .receive(on: DispatchQueue.main)
                     .sink { (currentTime, duration, playerState) in
-                    value = currentTime
-                    if maxValue != duration {
-                        maxValue = duration
-                    }
-                    if duration == 0 && playerState?.playerState == .playing {
-                        isButtonDisabled = true
-                    } else {
-                        isButtonDisabled = false
+                    DispatchQueue.main.async {
+                        if !audioPlayerViewModel.isScrubbingInProgress && currentTime != value {
+                            value = currentTime
+                            print("currentTime : \(value)")
+                        }
+
+                        if maxValue != duration {
+                            maxValue = duration
+                        }
+                        isButtonDisabled = (duration == 0 && playerState?.playerState == .playing)
                     }
                 }
                     .store(in: &audioPlayerViewModel.cancellables)

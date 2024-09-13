@@ -41,6 +41,7 @@ struct ArtistListView: View {
             Image("Logo")
                 .resizable()
                 .scaledToFill()
+                .clipShape(Circle())
                 .frame(width: 65, height: 65)
                 .scaleEffect(isSelected ? 1 : 0.9)
                 .padding(2)
@@ -58,7 +59,7 @@ struct ArtistListView: View {
             )
                 .animation(.easeIn(duration: 0.2), value: isSelected)
 
-            Text("스텔라이브")
+            Text("전체")
                 .font(isSelected ? .system(size: 12, weight: .bold) : .system(size: 11, weight: .bold))
         }
         .environment(\.colorScheme, colorScheme)
