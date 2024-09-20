@@ -231,7 +231,6 @@ struct ExpandedBottomSheet: View {
                     DispatchQueue.main.async {
                         if !audioPlayerViewModel.isScrubbingInProgress && currentTime != value {
                             value = currentTime
-                            print("currentTime : \(value)")
                         }
 
                         if maxValue != duration {
