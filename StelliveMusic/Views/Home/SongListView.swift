@@ -59,7 +59,7 @@ struct SongListView: View {
                         .cornerRadius(4)
                         .scaledToFill()
 
-                    if item == audioPlayerViewModel.currentSong {
+                    if item == audioPlayerViewModel.currentSong && audioPlayerViewModel.currentSong?.playerState != .stopped {
                         Color.black.opacity(0.8)
                         PlayingAnimationBar()
                             .frame(width: 15, height: 15)
