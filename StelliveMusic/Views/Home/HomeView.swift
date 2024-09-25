@@ -65,7 +65,7 @@ struct HomeView: View {
             }
 
             Button {
-                audioViewModel.playShuffleAudio()
+                audioViewModel.playAllShuffleAudio()
             } label: {
                 PlayButton(.random)
             }
