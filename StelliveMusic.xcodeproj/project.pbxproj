@@ -17,7 +17,7 @@
 		861C68BE2C890378003DCF8F /* StellaInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861C68BD2C890378003DCF8F /* StellaInfoViewModel.swift */; };
 		861C68C02C89181C003DCF8F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 861C68BF2C89181C003DCF8F /* Colors.xcassets */; };
 		862147BC2C8BA1640008B888 /* AudioPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862147BB2C8BA1640008B888 /* AudioPlayerViewModel.swift */; };
-		862147BE2C8BB5710008B888 /* Songs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862147BD2C8BB5710008B888 /* Songs.swift */; };
+		862147BE2C8BB5710008B888 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862147BD2C8BB5710008B888 /* Song.swift */; };
 		86321FAE2C8D596D00F45FF7 /* PlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86321FAD2C8D596D00F45FF7 /* PlayerState.swift */; };
 		8670DE162C876F9A0058D7DC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8670DE152C876F9A0058D7DC /* Kingfisher */; };
 		8670DE1A2C8770900058D7DC /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8670DE192C8770900058D7DC /* HomeView.swift */; };
@@ -48,7 +48,7 @@
 		861C68BD2C890378003DCF8F /* StellaInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StellaInfoViewModel.swift; sourceTree = "<group>"; };
 		861C68BF2C89181C003DCF8F /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		862147BB2C8BA1640008B888 /* AudioPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewModel.swift; sourceTree = "<group>"; };
-		862147BD2C8BB5710008B888 /* Songs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Songs.swift; sourceTree = "<group>"; };
+		862147BD2C8BB5710008B888 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		86321FAD2C8D596D00F45FF7 /* PlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerState.swift; sourceTree = "<group>"; };
 		8670DE192C8770900058D7DC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8670DE1B2C8770960058D7DC /* PlayListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayListView.swift; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 			children = (
 				861C68BB2C88FFDE003DCF8F /* StellaInfo.swift */,
 				86B2BB142C8A916D00EA7A84 /* SongInfo.swift */,
-				862147BD2C8BB5710008B888 /* Songs.swift */,
+				862147BD2C8BB5710008B888 /* Song.swift */,
 				8670DE312C8794140058D7DC /* SongType.swift */,
 				86321FAD2C8D596D00F45FF7 /* PlayerState.swift */,
 			);
@@ -246,7 +246,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					868D1FC52C876B3A00F194D9 = {
 						CreatedOnToolsVersion = 15.4;
@@ -297,7 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				862147BE2C8BB5710008B888 /* Songs.swift in Sources */,
+				862147BE2C8BB5710008B888 /* Song.swift in Sources */,
 				8670DE2C2C878AEC0058D7DC /* TabsView.swift in Sources */,
 				86C6B7702C8C195D00F07EF2 /* MusicPlayerView.swift in Sources */,
 				86B2BB152C8A916D00EA7A84 /* SongInfo.swift in Sources */,
@@ -329,6 +329,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -392,6 +393,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

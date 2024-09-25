@@ -49,7 +49,7 @@ struct SongListView: View {
     }
 
     @ViewBuilder
-    private func SongListItem(item: Songs, singer: String) -> some View {
+    private func SongListItem(item: Song, singer: String) -> some View {
         VStack(spacing: 16) {
             HStack(alignment: .center) {
                 ZStack(alignment: .center) {

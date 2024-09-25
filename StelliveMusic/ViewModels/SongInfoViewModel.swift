@@ -13,12 +13,12 @@ import Combine
 class SongInfoViewModel: ObservableObject {
     static let shared = SongInfoViewModel()
 
-    @Published var songInfoItems: [Songs] = []
+    @Published var songInfoItems: [Song] = []
     private var cancellables = Set<AnyCancellable>()
 
     let client = SupaClient.shared.setClient()
     
-    func sortData(_ item: [Songs]) -> [Songs] {
+    func sortData(_ item: [Song]) -> [Song] {
         return item.sorted {
             if $0.songInfo.registrationDate == $1.songInfo.registrationDate {
                 return $0.songInfo.id > $1.songInfo.id
@@ -37,7 +37,7 @@ class SongInfoViewModel: ObservableObject {
 
             Just(datas)
                 .map { songInfos in
-                    return songInfos.map { Songs(songInfo: $0, playerState: PlayerState.stopped) }
+                    return songInfos.map { Song(songInfo: $0, playerState: PlayerState.stopped) }
             }
                 .receive(on: RunLoop.main)
                 .sink {

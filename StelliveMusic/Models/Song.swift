@@ -1,5 +1,5 @@
 //
-//  Songs.swift
+//  Song.swift
 //  StelliveMusic
 //
 //  Created by yimkeul on 9/7/24.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class Songs: ObservableObject {
+class Song: ObservableObject {
 
     @Published var songInfo: SongInfo
     @Published var playerState: PlayerState = .stopped
@@ -19,8 +19,8 @@ class Songs: ObservableObject {
     }
 }
 
-extension Songs: Hashable {
-    static func == (lhs: Songs, rhs: Songs) -> Bool {
+extension Song: Hashable {
+    static func == (lhs: Song, rhs: Song) -> Bool {
         return lhs.songInfo == rhs.songInfo
     }
 
