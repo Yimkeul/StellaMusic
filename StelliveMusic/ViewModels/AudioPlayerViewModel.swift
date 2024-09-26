@@ -542,6 +542,26 @@ extension AudioPlayerViewModel {
 // MARK: 테스트 코드
 extension AudioPlayerViewModel {
 
+    func checkCurrentSong() {
+        self.$currentSong
+            .receive(on: DispatchQueue.main)
+            .sink {
+            guard let currentPlayerItemURl = self.player?.currentItem?.asset as? AVURLAsset else {
+                return
+            }
+            if currentPlayerItemURl.url.absoluteString != $0!.songInfo.mp3Link {
+                self.stopPlayback()
+                self.playAudio(selectSong: self.currentSong!)
+                
+//                self.player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string:
+//                    self.currentSong!.songInfo.mp3Link
+//                )!))
+            }
+        }
+            .store(in: &cancellables)
+    }
+
+    
     func checkQueueItems() {
         if let currentItem = self.player?.currentItem {
             let title = checkTitle(item: currentItem)
