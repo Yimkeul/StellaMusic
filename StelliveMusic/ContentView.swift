@@ -55,7 +55,7 @@ struct ContentView: View {
         }
             .onAppear {
                 try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-//                audioPlayerViewModel.checkCurrentSong()
+                audioPlayerViewModel.checkCurrentSong()
                 audioPlayerViewModel.MPNowPlayingInfoCenterSetting()
             Task {
                 await stellaInfoViewModel
