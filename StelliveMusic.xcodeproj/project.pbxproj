@@ -36,13 +36,6 @@
 		86B2BB152C8A916D00EA7A84 /* SongInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B2BB142C8A916D00EA7A84 /* SongInfo.swift */; };
 		86C6B76D2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6B76C2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift */; };
 		86C6B7702C8C195D00F07EF2 /* MusicPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6B76F2C8C195D00F07EF2 /* MusicPlayerView.swift */; };
-		86E07CB82CA581FD008C619F /* ControlCenter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E07CB72CA581FD008C619F /* ControlCenter+Extension.swift */; };
-		86E07CBA2CA5823D008C619F /* PreLoading+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E07CB92CA5823D008C619F /* PreLoading+Extension.swift */; };
-		86E07CBC2CA582B5008C619F /* PlayMode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E07CBB2CA582B5008C619F /* PlayMode+Extension.swift */; };
-		86E07CBE2CA582E3008C619F /* SupportSongList+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E07CBD2CA582E3008C619F /* SupportSongList+Extension.swift */; };
-		86E07CC02CA5832E008C619F /* PlayerController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E07CBF2CA5832E008C619F /* PlayerController+Extension.swift */; };
-		86E07CC22CA58376008C619F /* TimeObserver+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E07CC12CA58376008C619F /* TimeObserver+Extension.swift */; };
-		86E07CC42CA5851A008C619F /* DeBugTest+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E07CC32CA5851A008C619F /* DeBugTest+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,13 +67,6 @@
 		86C6B76C2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedBottomSheet.swift; sourceTree = "<group>"; };
 		86C6B76F2C8C195D00F07EF2 /* MusicPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayerView.swift; sourceTree = "<group>"; };
 		86DE9CD12C876D4600D26C10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		86E07CB72CA581FD008C619F /* ControlCenter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ControlCenter+Extension.swift"; sourceTree = "<group>"; };
-		86E07CB92CA5823D008C619F /* PreLoading+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreLoading+Extension.swift"; sourceTree = "<group>"; };
-		86E07CBB2CA582B5008C619F /* PlayMode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayMode+Extension.swift"; sourceTree = "<group>"; };
-		86E07CBD2CA582E3008C619F /* SupportSongList+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupportSongList+Extension.swift"; sourceTree = "<group>"; };
-		86E07CBF2CA5832E008C619F /* PlayerController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerController+Extension.swift"; sourceTree = "<group>"; };
-		86E07CC12CA58376008C619F /* TimeObserver+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeObserver+Extension.swift"; sourceTree = "<group>"; };
-		86E07CC32CA5851A008C619F /* DeBugTest+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeBugTest+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,13 +217,6 @@
 		86E07CB62CA581D2008C619F /* AudioPlayerViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				86E07CB72CA581FD008C619F /* ControlCenter+Extension.swift */,
-				86E07CB92CA5823D008C619F /* PreLoading+Extension.swift */,
-				86E07CBB2CA582B5008C619F /* PlayMode+Extension.swift */,
-				86E07CBD2CA582E3008C619F /* SupportSongList+Extension.swift */,
-				86E07CBF2CA5832E008C619F /* PlayerController+Extension.swift */,
-				86E07CC12CA58376008C619F /* TimeObserver+Extension.swift */,
-				86E07CC32CA5851A008C619F /* DeBugTest+Extension.swift */,
 			);
 			path = AudioPlayerViewModel;
 			sourceTree = "<group>";
@@ -329,27 +308,20 @@
 				862147BE2C8BB5710008B888 /* Song.swift in Sources */,
 				8670DE2C2C878AEC0058D7DC /* TabsView.swift in Sources */,
 				86C6B7702C8C195D00F07EF2 /* MusicPlayerView.swift in Sources */,
-				86E07CBA2CA5823D008C619F /* PreLoading+Extension.swift in Sources */,
-				86E07CC02CA5832E008C619F /* PlayerController+Extension.swift in Sources */,
-				86E07CBC2CA582B5008C619F /* PlayMode+Extension.swift in Sources */,
 				86B2BB152C8A916D00EA7A84 /* SongInfo.swift in Sources */,
 				86321FAE2C8D596D00F45FF7 /* PlayerState.swift in Sources */,
 				862147BC2C8BA1640008B888 /* AudioPlayerViewModel.swift in Sources */,
 				8670DE1A2C8770900058D7DC /* HomeView.swift in Sources */,
 				861C68BC2C88FFDE003DCF8F /* StellaInfo.swift in Sources */,
-				86E07CC22CA58376008C619F /* TimeObserver+Extension.swift in Sources */,
-				86E07CB82CA581FD008C619F /* ControlCenter+Extension.swift in Sources */,
 				861095042C8D73250027DF07 /* Double+Extension.swift in Sources */,
 				869C65712C907F910016C08B /* PlayingAnimationBar.swift in Sources */,
 				868D1FCC2C876B3A00F194D9 /* ContentView.swift in Sources */,
 				86B2BB132C8A914100EA7A84 /* SongInfoViewModel.swift in Sources */,
 				861C68BE2C890378003DCF8F /* StellaInfoViewModel.swift in Sources */,
 				8670DE322C8794140058D7DC /* SongType.swift in Sources */,
-				86E07CBE2CA582E3008C619F /* SupportSongList+Extension.swift in Sources */,
 				8670DE2A2C8784AE0058D7DC /* ArtistListView.swift in Sources */,
 				86C6B76D2C8BFC6D00F07EF2 /* ExpandedBottomSheet.swift in Sources */,
 				8670DE1C2C8770960058D7DC /* PlayListView.swift in Sources */,
-				86E07CC42CA5851A008C619F /* DeBugTest+Extension.swift in Sources */,
 				868D1FCA2C876B3A00F194D9 /* StelliveMusicApp.swift in Sources */,
 				861095012C8D72EC0027DF07 /* MusicProgressSlider.swift in Sources */,
 				8670DE302C8793920058D7DC /* SongListView.swift in Sources */,
