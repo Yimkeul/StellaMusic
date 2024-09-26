@@ -86,7 +86,6 @@
 		861095022C8D73150027DF07 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				86E07CB62CA581D2008C619F /* AudioPlayerViewModel */,
 				861095032C8D73250027DF07 /* Double+Extension.swift */,
 			);
 			path = Extensions;
@@ -212,13 +211,6 @@
 				861095002C8D72EC0027DF07 /* MusicProgressSlider.swift */,
 			);
 			path = MusicPlayer;
-			sourceTree = "<group>";
-		};
-		86E07CB62CA581D2008C619F /* AudioPlayerViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AudioPlayerViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
