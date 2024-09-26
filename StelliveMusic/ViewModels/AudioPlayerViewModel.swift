@@ -11,7 +11,7 @@ import Combine
 import MediaPlayer
 import Kingfisher
 
-class AudioPlayerViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
+class AudioPlayerViewModel: ObservableObject {
 
     enum PlayMode {
         case isInfinityMode
@@ -19,12 +19,14 @@ class AudioPlayerViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
         case isDefaultMode
     }
 
+
+
     @Published var filteredSongs: [Song] = []
     @Published var currentSong: Song?
 
     // 재생 시간 관련 프로퍼티
-    @Published  var duration: TimeInterval = 0.0
-    @Published  var currentTime: TimeInterval = 0.0
+    @Published private(set) var duration: TimeInterval = 0.0
+    @Published private(set) var currentTime: TimeInterval = 0.0
     @Published var isScrubbingInProgress: Bool = false // 슬라이더 드래그 중인지 여부
     @Published var isSeekInProgress: Bool = false // seek 작업이 진행 중인지 여부
 
@@ -32,33 +34,50 @@ class AudioPlayerViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
     @Published var playMode: PlayMode = .isDefaultMode
     @Published var isShuffleMode: Bool = false
 
-    var player: AVPlayer?
-    var waitingSongs: [Song] = []
-    var timeObserver: Any?
+    private var player: AVQueuePlayer?
+    private var waitingSongs: [Song] = []
+    private var timeObserver: Any?
 
     var cancellables = Set<AnyCancellable>()
     var isPlaying = false
 
-    var nextPlayerItem: AVPlayerItem?
-    var previousPlayerItem: AVPlayerItem?
 
-
-    override init() {
-        super.init()
+    init() {
         setupNotificationObservers()
     }
-    // MARK: Setup Notification Observers
+    // MARK: Setup Notification Observer
+
     private func setupNotificationObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleSongDidFinishPlaying(_:)), name: .AVPlayerItemDidPlayToEndTime, object: nil)
+
         NotificationCenter.default.addObserver(self, selector: #selector(handleAudioInterruption(_:)), name: AVAudioSession.interruptionNotification, object: nil)
     }
 
-    @objc private func handleSongDidFinishPlaying(_ notification: Notification) {
-        guard let currentSong = currentSong else { return }
-        currentSong.playerState = .stopped
-        playNextAudio(for: currentSong)
-    }
 
+    @objc private func handleSongDidFinishPlaying(_ notification: Notification) {
+        removePeriodicTimeObserver()
+        if let finishedItem = notification.object as? AVPlayerItem {
+            player?.remove(finishedItem)
+        }
+        guard let finishedSong = currentSong else { return }
+        finishedSong.playerState = .stopped
+        // MARK: CHEKCING
+//        print("Fin")
+//        checkQueueItems()
+
+        guard let nextSong = getNextSong(for: finishedSong) else { return }
+
+        switch playMode {
+        case .isDefaultMode:
+            handleDefaultMode(with: nextSong)
+        case .isInfinityMode:
+            handleInfinityMode(with: nextSong)
+        case .isOneSongInfinityMode:
+            // TODO: Implement one song infinite loop logic
+            break
+        }
+
+    }
     @objc private func handleAudioInterruption(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
             let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
@@ -68,7 +87,37 @@ class AudioPlayerViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
         pauseAudio()
     }
 
-    // array에서 index를 맨앞으로 하고 나머지는 shuffle :: legacy
+    // MARK: - Song Completion Logic
+
+    private func handleDefaultMode(with nextSong: Song) {
+        if nextSong == self.waitingSongs.first {
+            currentSong?.playerState = .stopped
+        } else if nextSong != self.waitingSongs.first {
+            handleReadyNextSong(nextSong: nextSong)
+        }
+    }
+
+    private func handleInfinityMode(with nextSong: Song) {
+        if nextSong == self.waitingSongs.first {
+            //한바퀴 재생 완료
+            if isShuffleMode {
+                playAllShuffleAudio()
+            } else {
+                playAllAudio()
+            }
+        } else {
+            handleReadyNextSong(nextSong: nextSong)
+        }
+    }
+
+    private func handleReadyNextSong(nextSong: Song) {
+        currentSong = nextSong
+        currentSong?.playerState = .playing
+        addPeriodicTimeObserver()
+        updateNowPlayingInfo()
+    }
+
+    // array에서 index를 맨앞으로 하고 나머지는 shuffle
     func shuffleExceptIndex<T>(array: [T], index: Int) -> [T] {
         let element = array[index]
         var remainingArray = array
@@ -77,7 +126,6 @@ class AudioPlayerViewModel: NSObject, ObservableObject, AVAudioPlayerDelegate {
         return [element] + remainingArray
     }
 }
-
 
 // MARK: MusicPlayer 전체 재생 관련
 extension AudioPlayerViewModel {
@@ -547,6 +595,5 @@ extension AudioPlayerViewModel {
         }
     }
 }
-
 
 
