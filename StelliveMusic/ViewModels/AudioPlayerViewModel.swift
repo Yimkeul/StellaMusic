@@ -111,13 +111,23 @@ class AudioPlayerViewModel: ObservableObject {
     }
 
     private func handleReadyNextSong(nextSong: Song) {
-        currentSong = nextSong
-        currentSong?.playerState = .playing
-        addPeriodicTimeObserver()
-        updateNowPlayingInfo()
+        checkQueueItems()
+
+        guard let currentPlayerItemURl = self.player?.currentItem?.asset as? AVURLAsset else {
+            return
+        }
+        if currentPlayerItemURl.url.absoluteString != nextSong.songInfo.mp3Link {
+            playAudio(selectSong: nextSong)
+            print("CHECK TIME")
+        } else {
+            currentSong = nextSong
+            currentSong?.playerState = .playing
+            addPeriodicTimeObserver()
+            updateNowPlayingInfo()
+        }
     }
 
-    // array에서 index를 맨앞으로 하고 나머지는 shuffle
+// array에서 index를 맨앞으로 하고 나머지는 shuffle
     func shuffleExceptIndex<T>(array: [T], index: Int) -> [T] {
         let element = array[index]
         var remainingArray = array
@@ -176,6 +186,15 @@ extension AudioPlayerViewModel {
             currentSong = selectSong
         }
         startPlay()
+        print("PlayItem : ", checkTitle(item: player!.currentItem!))
+        guard let currentPlayerItemURl = self.player?.currentItem?.asset as? AVURLAsset else {
+            return
+        }
+        if currentPlayerItemURl.url.absoluteString != currentSong!.songInfo.mp3Link {
+            playAudio(selectSong: currentSong!)
+        } else {
+            return
+        }
     }
 
     func playAllShuffleAudio() {
@@ -550,9 +569,10 @@ extension AudioPlayerViewModel {
                 return
             }
             if currentPlayerItemURl.url.absoluteString != $0!.songInfo.mp3Link {
+                print("CHECK2!!!")
                 self.stopPlayback()
                 self.playAudio(selectSong: self.currentSong!)
-                
+
 //                self.player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string:
 //                    self.currentSong!.songInfo.mp3Link
 //                )!))
@@ -561,7 +581,7 @@ extension AudioPlayerViewModel {
             .store(in: &cancellables)
     }
 
-    
+
     func checkQueueItems() {
         if let currentItem = self.player?.currentItem {
             let title = checkTitle(item: currentItem)
