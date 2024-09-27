@@ -34,7 +34,7 @@ class AudioPlayerViewModel: ObservableObject {
     @Published var playMode: PlayMode = .isDefaultMode
     @Published var isShuffleMode: Bool = false
 
-    private var player: AVQueuePlayer?
+    @Published var player: AVQueuePlayer?
     private var waitingSongs: [Song] = []
     private var timeObserver: Any?
 
@@ -65,7 +65,14 @@ class AudioPlayerViewModel: ObservableObject {
 //        print("Fin")
 //        checkQueueItems()
 
-        guard let nextSong = getNextSong(for: finishedSong) else { return }
+//        guard let nextSong = getNextSong(for: finishedSong) else { return }
+
+        guard let currentPlayerItem = self.player?.currentItem?.asset as? AVURLAsset else {
+            return
+        }
+
+        let currentPlayerURL = currentPlayerItem.url.absoluteString
+        guard let nextSong = waitingSongs.first(where: { $0.songInfo.mp3Link == currentPlayerURL }) else { return }
 
         switch playMode {
         case .isDefaultMode:
@@ -111,13 +118,27 @@ class AudioPlayerViewModel: ObservableObject {
     }
 
     private func handleReadyNextSong(nextSong: Song) {
+        checkQueueItems()
+
+//        guard let currentPlayerItemURl = self.player?.currentItem?.asset as? AVURLAsset else {
+//            return
+//        }
+//        if currentPlayerItemURl.url.absoluteString != nextSong.songInfo.mp3Link {
+////            playAudio(selectSong: nextSong)
+////            player?.replaceCurrentItem(with: AVPlayerItem(url: URL))
+//
+//            player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string:
+//                nextSong.songInfo.mp3Link
+//            )!))
+//            print("CHECK TIME")
+//        }
         currentSong = nextSong
         currentSong?.playerState = .playing
         addPeriodicTimeObserver()
         updateNowPlayingInfo()
     }
 
-    // array에서 index를 맨앞으로 하고 나머지는 shuffle
+// array에서 index를 맨앞으로 하고 나머지는 shuffle
     func shuffleExceptIndex<T>(array: [T], index: Int) -> [T] {
         let element = array[index]
         var remainingArray = array
@@ -129,6 +150,22 @@ class AudioPlayerViewModel: ObservableObject {
 
 // MARK: MusicPlayer 전체 재생 관련
 extension AudioPlayerViewModel {
+
+    func updateCurrentSong() {
+        removePeriodicTimeObserver()
+        self.currentSong?.playerState = .paused
+        guard let currentPlayerItem = self.player?.currentItem?.asset as? AVURLAsset else {
+            return
+        }
+        let currentPlayerURL = currentPlayerItem.url.absoluteString
+        guard let currentSong = waitingSongs.first(where: { $0.songInfo.mp3Link == currentPlayerURL }) else { return }
+        self.currentSong = currentSong
+        self.currentSong?.playerState = .playing
+        addPeriodicTimeObserver()
+        updateNowPlayingInfo()
+    }
+
+
     func playAllAudio() {
         if filteredSongs.isEmpty { return }
         clearAVPlayer()
@@ -550,18 +587,15 @@ extension AudioPlayerViewModel {
                 return
             }
             if currentPlayerItemURl.url.absoluteString != $0!.songInfo.mp3Link {
-                self.stopPlayback()
-                self.playAudio(selectSong: self.currentSong!)
-                
-//                self.player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string:
-//                    self.currentSong!.songInfo.mp3Link
-//                )!))
+                self.player?.replaceCurrentItem(with: AVPlayerItem(url: URL(string:
+                    self.currentSong!.songInfo.mp3Link
+                )!))
             }
         }
             .store(in: &cancellables)
     }
 
-    
+
     func checkQueueItems() {
         if let currentItem = self.player?.currentItem {
             let title = checkTitle(item: currentItem)

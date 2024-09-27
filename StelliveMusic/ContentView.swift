@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftUIIntrospect
 import AVFoundation
+import Combine
 
 struct ContentView: View {
     @State private var selection = 0
@@ -20,19 +21,19 @@ struct ContentView: View {
 
     var body: some View {
 //        TabView(selection: $selection) {
-            HomeView()
-                .environmentObject(stellaInfoViewModel)
-                .environmentObject(songInfoViewModel)
-                .environmentObject(audioPlayerViewModel)
+        HomeView()
+            .environmentObject(stellaInfoViewModel)
+            .environmentObject(songInfoViewModel)
+            .environmentObject(audioPlayerViewModel)
 //                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
 //                .tabItem {
 //                Image(systemName: "music.note.house")
 //                Text("홈")
 //            }
 
-                .tag(0)
+            .tag(0)
 
-            // TODO: 업데이트 하기
+        // TODO: 업데이트 하기
 //            PlayListView()
 //                .environmentObject(audioPlayerViewModel)
 //                .padding(.bottom, audioPlayerViewModel.currentSong != nil ? 70 : 0)
@@ -54,15 +55,33 @@ struct ContentView: View {
             }
         }
             .onAppear {
-                try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
-                audioPlayerViewModel.checkCurrentSong()
-                audioPlayerViewModel.MPNowPlayingInfoCenterSetting()
+            try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+            try? AVAudioSession.sharedInstance().setActive(true)
+//                audioPlayerViewModel.checkCurrentSong()
+            audioPlayerViewModel.MPNowPlayingInfoCenterSetting()
+
+            Publishers.CombineLatest(audioPlayerViewModel.$player, audioPlayerViewModel.$currentSong)
+                .receive(on: DispatchQueue.main)
+                .sink { player, currentSong in
+                    guard let currentPlayerItem = player?.currentItem?.asset as? AVURLAsset else {
+                        return
+                    }
+                    guard let currentSong = currentSong else { return }
+                    let currentPlayerURL = currentPlayerItem.url.absoluteString
+                    
+                    if currentPlayerURL != currentSong.songInfo.mp3Link {
+                        audioPlayerViewModel.updateCurrentSong()
+                    }
+                }
+                .store(in: &audioPlayerViewModel.cancellables)
+
+
             Task {
                 await stellaInfoViewModel
                     .fetchData()
                 await songInfoViewModel.fetchData()
             }
-                
+
 
         }
 
@@ -80,7 +99,7 @@ struct ContentView: View {
                     .fill(.ultraThinMaterial)
                     .overlay {
                     MusicPlayerView(expandSheet: $expandSheet, animation: animation)
-                            .environmentObject(audioPlayerViewModel)
+                        .environmentObject(audioPlayerViewModel)
                 }
                     .matchedGeometryEffect(id: "BGVIEW", in: animation)
             }
