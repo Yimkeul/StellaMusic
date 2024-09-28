@@ -1,4 +1,4 @@
-# Stella Music <img src="https://github.com/user-attachments/assets/8d57adb8-e30d-4a4c-ab41-69415e2bbae4" align=left width =100/> 
+# 스텔라뮤직 (StellaMusic) <img src="https://github.com/user-attachments/assets/8d57adb8-e30d-4a4c-ab41-69415e2bbae4" align=left width =100/> 
 스텔라이브 뮤직 플레이어
 
 ### 🍎 Apple Store
